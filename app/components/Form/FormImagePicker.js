@@ -12,7 +12,10 @@ function FormImagePicker({ name }) {
     console.log("test");
     if(uri===null){
       console.log("test22");
-      setFieldValue(name, [...imageUris, null]);
+      setFieldValue(
+        name,
+        imageUris.filter((imageUri) => imageUri !== uri).concat(null)
+      );
 
     }else{
       console.log("test333");

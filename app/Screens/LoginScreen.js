@@ -96,6 +96,9 @@ export default function LoginScreen({navigation,route}) {
      <TouchableOpacity style={styles.redirect} onPress={() => navigation.navigate('RegisterScreen')} >
        <Text>or You Can Register</Text>
      </TouchableOpacity>
+     <TouchableOpacity style={styles.redirect} onPress={() => navigation.navigate('TestChoiceScreen')} >
+       <Text>Skip Login</Text>
+     </TouchableOpacity>
      </Form>
 
     </Screen>

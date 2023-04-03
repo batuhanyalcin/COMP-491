@@ -23,6 +23,8 @@
     "expo-secure-store": "12.1.1",
     "expo-splash-screen": "0.18.1",
     "expo-status-bar": "~1.4.4",
+    "expo-sensors": "~12.1.1",
+    "expo-speech": "~11.1.1",
     "firebase": "^9.18.0",
     "formik": "2.2.9",
     "jwt-decode": "3.1.2",
@@ -32,6 +34,8 @@
     "react-native-paper": "5.5.1",
     "uuid": "9.0.0",
     "yup": "1.0.2",
+    "react-native-plotly": "^6.0.0",
+    "react-native-tts": "^4.1.0",
     "react-native-web": "~0.18.10",
     "react-dom": "18.2.0",
     "@expo/webpack-config": "^18.0.1"

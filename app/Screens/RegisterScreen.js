@@ -84,7 +84,7 @@ export default function RegisterScreen({navigation}) {
             placeholder="Your Password"
             secureTextEntry={true}
             />
-            <SubmitButton title="Register" />
+            <SubmitButton title="Register"  onPress={HandleSubmit} />
             <ErrorMessage error={error} />
             </Form>
         </ScrollView>

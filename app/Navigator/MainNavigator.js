@@ -7,7 +7,9 @@ import OldTests from '../Screens/OldTests';
 import TestChoiceScreen from '../Screens/TestChoiceScreen';
 import TestResult from '../Screens/TestResult';
 import TestScreen from '../Screens/TestScreen';
+import balanceTestScreen from '../Screens/balanceTestScreen';
 import AboutUsScreen from '../Screens/AboutUsScreen';
+
 
 
 
@@ -21,6 +23,7 @@ export default function MainNavigator() {
         <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
         <Stack.Screen name="OldTests" component={OldTests} />
         <Stack.Screen name="TestChoiceScreen" component={TestChoiceScreen} />
+        <Stack.Screen name="balanceTestScreen" component={balanceTestScreen} />
         <Stack.Screen name="TestResult" component={TestResult} />
         <Stack.Screen name="TestScreen" component={TestScreen} />
         <Stack.Screen name="AboutUsScreen" component={AboutUsScreen} />
