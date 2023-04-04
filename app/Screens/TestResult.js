@@ -40,8 +40,7 @@ export default function TestResult({navigation, route}) {
     // Integrate with Simpson's 1/3 Rule
     var jerkI = 0
     jerkI = jerkX2[0]
-    //console.log(jerkX2)
-    //console.log(jerkX[jerkX.length-2])
+
     for (i = 1; i < x.length - 1; i++) {
       jerkI += (i % 2 == 1 ? 4 * jerkX2[0] : 2 * jerkX2[0])
     }
