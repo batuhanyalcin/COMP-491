@@ -5,7 +5,7 @@ import * as Speech from 'expo-speech'
 import { DeviceMotion } from 'expo-sensors';
 import SpaghettiGraph from '../Models/SpaghettiGraph';
 
-export default function balanceTestScreen() {
+export default function balanceTestScreen({navigation,route}) {
   const [data, setData] = useState({});
   const accX = [];
   const accY = [];
@@ -31,6 +31,7 @@ export default function balanceTestScreen() {
         Speech.speak("The test has ended", {language: 'en'})
         setGraphComp(<SpaghettiGraph x={accX} y={accZ}/>)
         setTestEnded(true)
+        navigation.navigate('TestResult', {accX: accX, accZ: accZ, duration: totalTime, dt: dt})
         return
       }
       i++
