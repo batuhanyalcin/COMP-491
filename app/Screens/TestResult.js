@@ -18,37 +18,60 @@ export default function TestResult({navigation, route}) {
     }
     return pathLength
   }
+  
 
-  function calculateJerk(x, y) {
-    // Calculate derivative of x and y
-    jerkX = Array(x.length)
+  function calculateDerivative(y, dx) {
+    var dydx = Array(y.length)
+
     // Forward FD for left end node
-    jerkX[0] = (-x[2] + 4*x[1] - 3*x[0]) / (2 * dt)
-    
+    dydx[0] = (-y[2] + 4*y[1] - 3*y[0]) / (2 * dx)
+
     // Central FD for internal nodes
     var i
-    for (i = 1; i < x.length - 1; i++) {
-      jerkX[i] = (x[i+1] - x[i-1]) / (2 * dt)
+    for (i = 1; i < y.length - 1; i++) {
+      dydx[i] = (y[i+1] - y[i-1]) / (2 * dx)
     }
 
     // Backward FD for right end node
-    jerkX[i] = (-x[i-2] + 4*x[i-1] - 3*x[i]) / (2 * dt)
+    dydx[dydx.length - 1] = -(-y[i-2] + 4*y[i-1] - 3*y[i]) / (2 * dx)
     
-    // Take square of jerk
-    jerkX2 = jerkX.map(a => a**2)
-
-    // Integrate with Simpson's 1/3 Rule
-    var jerkI = 0
-    jerkI = jerkX2[0]
-
-    for (i = 1; i < x.length - 1; i++) {
-      jerkI += (i % 2 == 1 ? 4 * jerkX2[0] : 2 * jerkX2[0])
-    }
-    
-    jerkI += jerkX2[i]
-    jerkI *= dt / 3
-    return jerkI
+    return dydx
   }
+
+
+  function calculateIntegral(y, dx) {
+    // Integrate using Simpson's 1/3 Rule
+    var yI = y[0]
+
+    for (i = 1; i < y.length - 1; i++) {
+      yI += (i % 2 == 1 ? 4 * y[i] : 2 * y[i])
+    }
+
+    yI += y[y.length - 1]
+
+    yI *= dx / 3
+    return yI
+
+  }
+
+
+  function calculateJerk(x, z, dt) {
+    // Calculate derivative of x and y
+    var jerkX = calculateDerivative(x, dt)
+    var jerkZ =  calculateDerivative(z, dt)
+
+    // Take square of jerk
+    var jerkX2 = jerkX.map(a => a**2)
+    var jerkZ2 = jerkZ.map(a => a**2)
+    
+    // Integrate jerk
+    var jerkXI = calculateIntegral(jerkX2, dt)
+    var jerkZI = calculateIntegral(jerkZ2, dt)
+
+    return (1 / 2) * (jerkXI + jerkZI)
+ 
+  }
+
 
   return (
     <View style={styles.container}>
@@ -57,7 +80,7 @@ export default function TestResult({navigation, route}) {
       <Text>Metrics:</Text>
       <Text>Path Length: {calculatePathLength(accX, accZ)}</Text>
       <Text>Normalized Path Length: {duration / calculatePathLength(accX, accZ)}</Text>
-      <Text>Jerk: {calculateJerk(accX, accZ)}</Text>
+      <Text>Jerk: {calculateJerk(accX, accZ, dt)}</Text>    
     </View>
   )
 }
