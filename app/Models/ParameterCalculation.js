@@ -57,7 +57,7 @@ export function calculateLength(x, y) {
     }
     return pathLength
 }
-
+/*
 export function calculatePathLength(accX, accZ, dt) {
     // Integrate acceleration data to calculate velocity
     const velX = rungeKuttaIntegral(accX, dt)
@@ -72,6 +72,14 @@ export function calculatePathLength(accX, accZ, dt) {
 
     return pathLength
 } 
+*/
+export function calculatePathLength(x, y, dt) {
+    return {
+        pl: calculateLength(x, y),
+        plx: x.reduce((a, b) => Math.abs(a) + Math.abs(b), 0),
+        plz: y.reduce((a, b) => Math.abs(a) + Math.abs(b), 0)
+    }
+}
 
 
 /*
@@ -139,8 +147,8 @@ export function calculateMeanVelocity(x, z, dt) {
     const meanVel = vel.reduce((a, b) => a + b, 0) / vel.length
     return {
         meanVel: meanVel,
-        meanVelX: velX.reduce((a, b) => a + b, 0) / velX.length,
-        meanVelZ: velZ.reduce((a, b) => a + b, 0) / velZ.length
+        meanVelX: velX.reduce((a, b) => Math.abs(a) + Math.abs(b), 0) / velX.length,
+        meanVelZ: velZ.reduce((a, b) => Math.abs(a) + Math.abs(b), 0) / velZ.length
     }
 
 }
