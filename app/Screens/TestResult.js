@@ -1,8 +1,12 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { SafeAreaView, StyleSheet, Text, View, ScrollView, Button } from 'react-native'
 import React from 'react'
 import { Table, TableWrapper, Row, Rows, Col } from 'react-native-table-component'
 import SpaghettiGraph from '../Models/SpaghettiGraph'
 import * as pc from '../Models/ParameterCalculation'
+import ListItem from '../components/ListItem'
+import * as DocumentPicker from 'expo-document-picker';
+import * as FileSystem from 'expo-file-system';
+import * as Sharing from 'expo-sharing';
 
 export default function TestResult({navigation, route}) {
   const accX = route.params.accX
@@ -28,39 +32,65 @@ export default function TestResult({navigation, route}) {
       [pc.calculateMeanVelocity(accX, accZ, dt).meanVelZ.toFixed(4)]
     ]
   }
+  var csvString = "accX, accZ\n"
+  for (let i = 0; i < accX.length; i++) {
+    csvString = csvString.concat(`${accX[i]}, ${accZ[i]}\n`)
+  }
+
+  var listArr = []
+  for (let i = 0; i < tableContent.tableData.length; i++) {
+    listArr.push(
+      <ListItem title={tableContent.tableTitle[i]} items={[tableContent.tableData[i]]} />
+    )
+  }
+  
+  const [fileUri, setFileUri] = React.useState(null);
+
+  // create the file when the component mounts
+  React.useEffect(() => {
+    async function createFile() {
+      const uri = `${FileSystem.documentDirectory}balanceResults.csv`;
+      await FileSystem.writeAsStringAsync(uri, csvString, {
+        encoding: FileSystem.EncodingType.UTF8,
+      });
+      setFileUri(uri);
+    }
+    createFile();
+  }, []);
+
+  // handle the button press
+  async function handleSharePress() {
+    console.log("Clicked on button")
+    try {
+      await Sharing.shareAsync(fileUri, {
+        mimeType: 'text/csv',
+        dialogTitle: 'Share File',
+        UTI: 'public.comma-separated-values-text',
+      });
+    } catch (error) {
+      console.error('Error sharing file: ', error);
+    }
+  }
+  
 
 
 
 
   return (
-    <View style={styles.container}>
-      <Text style={{height: 50, fontSize: 20, fontWeight: 'bold', alignSelf: 'baseline', paddingLeft: 30}}>Test Result</Text>
-      <SpaghettiGraph x={accX} y={accZ}/>
-      <Text style={{height: 50, fontSize: 20, fontWeight: 'bold', alignSelf: 'baseline', paddingLeft: 30}}>Metrics</Text>
-      <Table borderStyle={{borderWidth: 1}} style={{width: "95%"}}>
-        <Row 
-          data={tableContent.tableHead}
-          style={styles.head}
-          textStyle={styles.titleText}
-          flexArr={[1,1]}
-        />
-        <TableWrapper style={styles.wrapper}>
-          <Col 
-            data={tableContent.tableTitle}
-            style={styles.title}
-            textStyle={styles.titleText}
-          />
-          <Rows
-            data={tableContent.tableData}
-            style={styles.row}
-            textStyle={styles.text}
-            flexArr={[1]}
-          />
-        </TableWrapper>
-      </Table>
+    <SafeAreaView style={styles.container}>
+      <ScrollView vertical={true} style={{backgroundColor: 'rgb(250, 250, 250)', width: '100%', flex: 1, flexDirection:'column', borderRadius: 15}}>
+        <Text style={{height: 50, fontSize: 20, fontWeight: 'bold', alignSelf: 'baseline', paddingLeft: 30}}>Test Result</Text>
+        <View style={{flex: 1, height:500, margin: 10, alignItems: 'center', backgroundColor: 'rgba(0,0,0,0)'}}>
+          <SpaghettiGraph x={accX} y={accZ} style={{margin: 10}}/>
+        </View>
+        <Button title='Save to files' onPress={handleSharePress} disabled={!fileUri}></Button>
+        <Text style={{height: 50, fontSize: 20, fontWeight: 'bold', alignSelf: 'baseline', paddingLeft: 30}}>Metrics</Text>
+        <View style={{flex: 1, flexDirection: 'column'}}>
+          {listArr}
+        </View>
+      </ScrollView>
       
-      
-    </View>
+    </SafeAreaView>
   )
 }
 
@@ -69,9 +99,16 @@ const styles = StyleSheet.create({
   head: { height: 40, backgroundColor: '#e8e8e8' },
   wrapper: { flexDirection: 'row'},
   title: { flex: 1, backgroundColor: 'white' },
-  row: { height: 33 },
+  row: { height: 40 },
   titleText: { textAlign: 'left', paddingLeft: 15, fontWeight: 700 },
   text: { textAlign: 'left', paddingLeft: 15 },
+  scrollView: {
+    backgroundColor: 'rgb(245, 245, 245)',
+    marginTop: -1,
+    borderRadius: 15,
+
+    
+  },
 });
 /*
 const styles = StyleSheet.create({

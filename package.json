@@ -40,10 +40,17 @@
     "react-native-web": "~0.18.10",
     "react-native-webview": "11.26.0",
     "uuid": "9.0.0",
-    "yup": "1.0.2"
+    "yup": "1.0.2",
+    "expo-file-system": "~15.2.2",
+    "expo-document-picker": "~11.2.2",
+    "expo-sharing": "~11.2.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
   },
-  "private": true
+  "private": true,
+  "description": "The Balance Monitor App is a mobile application designed to help users keep track of their balance, and to provide feedback to both the user and their doctor about their health. The app uses sensors on the user's phone to monitor their balance and track any changes over time.",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

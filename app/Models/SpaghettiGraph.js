@@ -26,15 +26,26 @@ export default function SpaghettiGraph(props)  {
         __id: 'up',
         x: med_filtered_x,
         y: med_filtered_y,
-        type: 'scatter'
+        type: 'scatter',
+        marker: {
+          color: 'rgb(54, 73, 153)',
+        }
       };
 
     state = {
         data: [data],
         layout: { 
-            title: 'Spagetti Graph',
+            title: {text: '<b>Spagetti Graph</b>',
+                    font: {
+                      family: 'Helvetica Neue',
+                      weight: 'bold',
+                      size: 15
+                    }  
+                  },
             xaxis: {fixedrange: true},
-            yaxis: {fixedrange: true}    
+            yaxis: {fixedrange: true},
+            paper_bgcolor: 'rgba(233,233,233, 0)',
+            plot_bgcolor: 'rgba(200,100,10, 0)'
         }
     };
 
@@ -46,6 +57,7 @@ export default function SpaghettiGraph(props)  {
             data={state.data}
             layout={state.layout}
             config={{'displayModeBar': false}}
+            style={{backgroundColor: 'rgba(0,0,0,0)'}}
           />
         </View>
       </View>
@@ -55,19 +67,23 @@ export default function SpaghettiGraph(props)  {
 
 const styles = StyleSheet.create({
   buttonRow: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    backgroundColor: 'rgba(0,0,0,0)'
   },
   chartRow: {
     flex: 1,
-    width: '100%'
+    width: '100%',
+    backgroundColor: 'rgba(0,0,0,0)'
+    
   },
   container: {
-    paddingTop: 30,
-    width: '80%',
-    height: '50%',
-    backgroundColor: '#fff',
+    paddingTop: 0,
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba(155,155,155, 0)',
     alignItems: 'center',
     justifyContent: 'center'
+    
   }
 });
 
