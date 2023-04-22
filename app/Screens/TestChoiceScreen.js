@@ -15,7 +15,7 @@ export default function TestChoiceScreen({navigation,route}) {
         source={require("../assets/healthcare.png")}
         />
         <AppText>Welcome _user_ </AppText>
-        <TouchableOpacity style={styles.redirect} onPress={() => navigation.navigate('balanceTestScreen')} >
+        <TouchableOpacity style={styles.redirect} onPress={() => navigation.navigate('BalanceTestScreen')} >
             <AppText>Balance Test</AppText>
         </TouchableOpacity>
 
