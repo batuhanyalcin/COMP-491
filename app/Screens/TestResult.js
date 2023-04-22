@@ -60,7 +60,6 @@ export default function TestResult({navigation, route}) {
 
   // handle the button press
   async function handleSharePress() {
-    console.log("Clicked on button")
     try {
       await Sharing.shareAsync(fileUri, {
         mimeType: 'text/csv',

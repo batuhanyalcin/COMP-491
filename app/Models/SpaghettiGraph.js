@@ -6,8 +6,6 @@ import Plotly from 'react-native-plotly';
 
 
 export default function SpaghettiGraph(props)  {
-    console.log("hello");
-
     //Median Filter
     const med_filtered_x = medianFilter(props.x,5);
     const med_filtered_y = medianFilter(props.y,5);
