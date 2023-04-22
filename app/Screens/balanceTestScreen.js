@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, Button } from 'react-native';
 import * as Speech from 'expo-speech'
-
 import { DeviceMotion } from 'expo-sensors';
-import SpaghettiGraph from '../Models/SpaghettiGraph';
+import { CountdownCircleTimer, useCountdown } from 'react-native-countdown-circle-timer';
+import Svg, { Path, LinearGradient, Stop, Defs } from 'react-native-svg';
 
 export default function BalanceTestScreen({navigation,route}) {
   const [data, setData] = useState({});
@@ -70,6 +70,7 @@ export default function BalanceTestScreen({navigation,route}) {
             else {
               Speech.speak("The test has started.", {language: 'en'})
               i = 0;
+              setIsPlaying(true);
               _subscribe();
 
             }
@@ -93,17 +94,78 @@ export default function BalanceTestScreen({navigation,route}) {
   }, []);
   */
 
-
-
+  const [isPlaying, setIsPlaying] = React.useState(false)
+  const duration = totalTime
+  const {
+    path,
+    pathLength,
+    stroke,
+    strokeDashoffset,
+    remainingTime,
+    elapsedTime,
+    size,
+    strokeWidth,
+  } = useCountdown({ isPlaying: isPlaying, duration, colors: 'url(#your-unique-id)' })
+  
   return (
     <View style={styles.container}>
-      <Text>Time: {time}</Text>
+      {true ? 
+      <View style={{ width: size, height: size, position: 'relative' }}>
+        <Svg width={size} height={size}>
+          <Defs>
+            <LinearGradient id="your-unique-id" x1="1" y1="0" x2="0" y2="0">
+              <Stop offset="5%" stopColor="blue"/>
+              <Stop offset="95%" stopColor="purple"/>
+            </LinearGradient>
+          </Defs>
+          <Path
+            d={path}
+            fill="none"
+            stroke="#d9d9d9"
+            strokeWidth={strokeWidth}
+          />
+          {elapsedTime !== duration && (
+            <Path
+              d={path}
+              fill="none"
+              stroke={stroke}
+              strokeLinecap="round"
+              strokeWidth={strokeWidth}
+              strokeDasharray={pathLength}
+              strokeDashoffset={strokeDashoffset}
+            />
+          )}
+        </Svg>
+        <View style={styles.time}>
+          <Text style={{ fontSize: 36, fontWeight: 600, color: 'rgb(20,20,20)' }}>{time}</Text>
+        </View>
+      </View>
+      : null
+      }
       <Button title='Start Test' onPress={startTest}></Button>
     </View>
   );
 }
 
+/*
+<View style={{flexDirection: 'row', justifyContent: 'space-evenly', flexWrap: 'wrap', alignItems: 'center'}}>
+        <DonutChart />
+        
+      </View>
+*/
 
+/*<CountdownCircleTimer
+        isPlaying={isPlaying}
+        duration={totalTime}
+        colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
+        onComplete={() => {}}
+    >
+      {({ remainingTime, color }) => (
+        <Text style={{ color, fontSize: 40, fontWeight: 700 }}>
+          {remainingTime}
+        </Text>
+      )}
+    </CountdownCircleTimer>*/
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -111,4 +173,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  time: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    width: '100%',
+    height: '100%'
+  }
 });
