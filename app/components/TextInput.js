@@ -6,7 +6,7 @@ import colors from '../config/colors';
 
 export default function AppTextInput({icon,width="100%",...otherProps}) {
   return (
-    <View style={[styles.container,{width}]}>
+    <View style={[styles.container,{width:"95%"}]}>
         {icon && <MaterialCommunityIcons
         name={icon}
         size={28} color={colors.medium}
@@ -15,7 +15,7 @@ export default function AppTextInput({icon,width="100%",...otherProps}) {
 
         <TextInput 
         placeholderTextColor={colors.medium}
-        style={[defaultStyle.text,{width:"100%"}]} {...otherProps}
+        style={[defaultStyle.text,{width:"80%"}]} {...otherProps}
         />
 
     </View>
@@ -23,9 +23,18 @@ export default function AppTextInput({icon,width="100%",...otherProps}) {
 }
 
 const styles = StyleSheet.create({
+  
     container :{
-        backgroundColor : colors.gray,
-        borderRadius:10,
+        borderColor: '#e8e8e8',
+        borderWidth:0.5,
+        borderRadius: 100,
+        marginVertical: 10,
+        marginHorizontal:10,
+        height: 60,
+        padding: 10,
+
+        //backgroundColor : colors.gray,
+        
         flexDirection : "row",
         padding:15,
         marginVertical:10

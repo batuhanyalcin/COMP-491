@@ -70,18 +70,18 @@ export default function RegisterScreen({navigation}) {
         >
             <FormImagePicker name="images" />
             
-            <FormField maxLength={255} name="name" placeholder="Your name" />
-            <FormField maxLength={255} name="email" placeholder="Your Email" />
+            <FormField maxLength={255} name="name" placeholder="Name" />
+            <FormField maxLength={255} name="email" placeholder="Email" />
             <FormField
             keyboardType="numeric"
             maxLength={10}
             name="Phone_no"
-            placeholder="Your Phone no."
+            placeholder="Phone number"
           />
      
              <FormField 
             name="password"
-            placeholder="Your Password"
+            placeholder="Password"
             secureTextEntry={true}
             />
             <SubmitButton title="Register"  onPress={HandleSubmit} />
@@ -95,15 +95,16 @@ export default function RegisterScreen({navigation}) {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor:"white",
     flex: 1,
-    backgroundColor: colors.grey,
     alignItems: 'center',
-    padding:10,
+    //padding:10,
     justifyContent: 'center',
-    borderWidth:4,
+    //borderWidth:4,
     borderColor:colors.grey
   },
   logo: {
+    marginTop: 25,
     height: 150,
     width: 150,
     alignSelf:"center"

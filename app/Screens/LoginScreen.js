@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions} from 'react-native'
 import React, { useState } from 'react'
 import * as Yup from "yup";
 import useAuth from '../auth/useAuth'
@@ -84,17 +84,17 @@ export default function LoginScreen({navigation,route}) {
         icon="email"
        maxLength={255}
        name="email"
-       placeholder="Your Email"
+       placeholder="Email"
      />
      <FormField
        icon="eye-off"
        name="password"
-       placeholder="Your Password"
+       placeholder="Password"
        secureTextEntry={true}
      />
      <SubmitButton title="Login" />
      <TouchableOpacity style={styles.redirect} onPress={() => navigation.navigate('RegisterScreen')} >
-       <Text>or You Can Register</Text>
+       <Text>Create an account</Text>
      </TouchableOpacity>
      <TouchableOpacity style={styles.redirect} onPress={() => navigation.navigate('TestChoiceScreen')} >
        <Text>Skip Login</Text>
@@ -109,7 +109,7 @@ export default function LoginScreen({navigation,route}) {
  const styles = StyleSheet.create({
      container: {
          flex: 1,
-         backgroundColor: colors.grey,
+         backgroundColor: colors.white,
          alignItems: 'center',
          padding:10,
          justifyContent: 'center',
@@ -117,8 +117,8 @@ export default function LoginScreen({navigation,route}) {
          borderColor:colors.grey
        },
        logo:{
-         height:150,
-         width:150,
+         height: "25%",
+         marginBottom:60,
          alignSelf:'center'
        },
        text:{
@@ -138,5 +138,6 @@ export default function LoginScreen({navigation,route}) {
         justifyContent:"space-evenly",
         borderRadius:10,
         marginBottom:10,
-       }
+       },
+  
  })

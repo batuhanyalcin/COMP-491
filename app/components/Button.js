@@ -4,6 +4,7 @@ import colors from '../config/colors'
 
 export default function Button({title,onPress,color="primary"}) {
   return (
+    
    <TouchableOpacity style={[styles.button,{backgroundColor:colors[color]}]}
    onPress={onPress}
    >
@@ -14,12 +15,11 @@ export default function Button({title,onPress,color="primary"}) {
 
 const styles = StyleSheet.create({
     button : {
-        backgroundColor : colors.primary,
-        borderRadius: 10,
+        borderRadius: 100,
         justifyContent:'center',
         alignItems:'center',
         padding: 15,
-        width:"100%",
+        width:"95%",
         marginVertical:10
     
     },
