@@ -1,14 +1,24 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import colors from '../config/colors'
-
+import { LinearGradient } from 'expo-linear-gradient';
 export default function Button({title,onPress,color="primary"}) {
   return (
     
-   <TouchableOpacity style={[styles.button,{backgroundColor:colors[color]}]}
+   <TouchableOpacity style={[styles.button]}
    onPress={onPress}
    >
+     <LinearGradient
+        colors={['#090979', '#00d4ff']}
+        useAngle={true}
+        angle={60}
+        angleCenter={{ x: 0, y: 1 }}
+        start={[0, 0]}
+        end={[1, 0]}
+        style={[styles.button,{ borderRadius: 100 }]}
+      >
         <Text style={styles.text}>{title}</Text>
+        </LinearGradient>
    </TouchableOpacity>
   )
 }

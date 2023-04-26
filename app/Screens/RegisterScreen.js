@@ -68,7 +68,7 @@ export default function RegisterScreen({navigation}) {
           onSubmit={HandleSubmit}
         validationSchema={validationSchema}
         >
-            <FormImagePicker name="images" />
+            <FormImagePicker name="images" style= {styles.image_picker} />
             
             <FormField maxLength={255} name="name" placeholder="Name" />
             <FormField maxLength={255} name="email" placeholder="Email" />
@@ -98,9 +98,9 @@ const styles = StyleSheet.create({
     backgroundColor:"white",
     flex: 1,
     alignItems: 'center',
-    //padding:10,
+    padding:10,
     justifyContent: 'center',
-    //borderWidth:4,
+    borderWidth:4,
     borderColor:colors.grey
   },
   logo: {
@@ -109,4 +109,7 @@ const styles = StyleSheet.create({
     width: 150,
     alignSelf:"center"
   },
+  image_picker: {
+    marginBottom: 20
+  }
 })
