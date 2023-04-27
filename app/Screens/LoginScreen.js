@@ -117,7 +117,8 @@ export default function LoginScreen({navigation,route}) {
          borderColor:colors.grey
        },
        logo:{
-         height: "25%",
+         width: 200,
+         height: 200,
          marginBottom:60,
          alignSelf:'center'
        },
