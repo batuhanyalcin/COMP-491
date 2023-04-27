@@ -2,7 +2,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import colors from '../config/colors'
 import { LinearGradient } from 'expo-linear-gradient';
-export default function Button({title,onPress,color="primary"}) {
+export default function Button({title,onPress}) {
   return (
     
    <TouchableOpacity style={[styles.button]}
