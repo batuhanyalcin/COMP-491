@@ -29,7 +29,8 @@ export default function RegisterScreen({navigation}) {
   const [error, setError] = useState();
   const [loading,setLoading] =useState(false);
 
-  const HandleSubmit = async (email,password,name,Phone_no,images) => {
+  const HandleSubmit = () => {
+    /*
     console.warn("This is a test warning");
     console.log("hello");
     try{
@@ -42,10 +43,26 @@ export default function RegisterScreen({navigation}) {
 
     };
       console.log(Constants.manifest.extra.API_URL);
+      */
+     console.log("In handle");
+      
+
+      // Make HTTP POST request to PHP script
+      axios
+        .post("./submit.php", {})
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+        
+        console.log("Out handle");
    
 
   
 }
+  HandleSubmit();
 
   return (
    <>
@@ -56,7 +73,7 @@ export default function RegisterScreen({navigation}) {
           style={styles.logo}
           source={require("../assets/logo.png")}
         />
-        <Form 
+        <Form
         initialValues={{
           name:"",
           Phone_no:"",
@@ -69,6 +86,8 @@ export default function RegisterScreen({navigation}) {
         validationSchema={validationSchema}
         >
             <FormImagePicker name="images" style= {styles.image_picker} />
+            
+
             
             <FormField maxLength={255} name="name" placeholder="Name" />
             <FormField maxLength={255} name="email" placeholder="Email" />
@@ -85,6 +104,7 @@ export default function RegisterScreen({navigation}) {
             secureTextEntry={true}
             />
             <SubmitButton title="Register"  onPress={HandleSubmit} />
+            
             <ErrorMessage error={error} />
             </Form>
         </ScrollView>
