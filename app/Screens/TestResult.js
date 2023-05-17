@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Text, View, ScrollView, Button } from 'react-native'
+import { SafeAreaView, StyleSheet, Text, View, ScrollView, Button, FlatList } from 'react-native'
 import React from 'react'
 import { Table, TableWrapper, Row, Rows, Col } from 'react-native-table-component'
 import SpaghettiGraph from '../Models/SpaghettiGraph'
@@ -14,35 +14,26 @@ export default function TestResult({navigation, route}) {
   const duration = route.params.duration
   const dt = route.params.dt
 
+  const listData = [
+    {key: "Path Length (m/s^2)", value: pc.calculatePathLength(accX, accZ, dt).pl?.toFixed(2)},
+    {key: "Path Length (Coronal) (m/s^2)", value: pc.calculatePathLength(accX, accZ, dt).plx?.toFixed(2)},
+    {key: "Path Length (Sagittal) (m/s^2)", value: pc.calculatePathLength(accX, accZ, dt).plz?.toFixed(2)},
+    {key: "Normalized Path Length (s^3/m)", value: (duration / pc.calculatePathLength(accX, accZ, dt).pl)?.toFixed(2)},
+    {key: "Jerk (m^2/s^5)", value: pc.calculateJerk(accX, accZ, dt).jerk.toFixed(2)},
+    {key: "Jerk (m^2/s^5) (Coronal)", value: pc.calculateJerk(accX, accZ, dt).jerkX.toFixed(2)},
+    {key: "Jerk (m^2/s^5) (Sagittal)", value: pc.calculateJerk(accX, accZ, dt).jerkZ.toFixed(2)},
+    {key: "Mean Velocity (m/s)", value: pc.calculateMeanVelocity(accX, accZ, dt).meanVel.toFixed(4)},
+    {key: "Mean Velocity (m/s) (Coronal)", value: pc.calculateMeanVelocity(accX, accZ, dt).meanVelX.toFixed(4)},
+    {key: "Mean Velocity (m/s) (Sagittal)", value: pc.calculateMeanVelocity(accX, accZ, dt).meanVelZ.toFixed(4)}
+  ]
   
-  const tableContent = {
-    tableHead: ['Unilateral', 'Result'],
-    tableTitle: ['Path Length (m/s^2)', 'Path Length (Coronal) (m/s^2)', 'Path Length (Sagittal) (m/s^2)', 'Normalized Path Length (s^3/m)', 'Jerk (m^2/s^5)' ,'Jerk (Coronal) (m^2/s^5)',
-  'Jerk (Sagittal) (m^2/s^5)', 'Mean Velocity (m/s)', 'Mean Velocity (Coronal) (m/s)', 'Mean Velocity (Sagittal) (m/s)'],
-    tableData: [
-      [pc.calculatePathLength(accX, accZ, dt).pl.toFixed(2)], 
-      [pc.calculatePathLength(accX, accZ, dt).plx.toFixed(2)], 
-      [pc.calculatePathLength(accX, accZ, dt).plz.toFixed(2)], 
-      [(duration / pc.calculatePathLength(accX, accZ, dt).pl).toFixed(2)],
-      [pc.calculateJerk(accX, accZ, dt).jerk.toFixed(2)],
-      [pc.calculateJerk(accX, accZ, dt).jerkX.toFixed(2)],
-      [pc.calculateJerk(accX, accZ, dt).jerkZ.toFixed(2)],
-      [pc.calculateMeanVelocity(accX, accZ, dt).meanVel.toFixed(4)],
-      [pc.calculateMeanVelocity(accX, accZ, dt).meanVelX.toFixed(4)],
-      [pc.calculateMeanVelocity(accX, accZ, dt).meanVelZ.toFixed(4)]
-    ]
-  }
+
   var csvString = "accX, accZ\n"
   for (let i = 0; i < accX.length; i++) {
     csvString = csvString.concat(`${accX[i]}, ${accZ[i]}\n`)
   }
 
-  var listArr = []
-  for (let i = 0; i < tableContent.tableData.length; i++) {
-    listArr.push(
-      <ListItem title={tableContent.tableTitle[i]} items={[tableContent.tableData[i]]} />
-    )
-  }
+
   
   const [fileUri, setFileUri] = React.useState(null);
 
@@ -72,9 +63,6 @@ export default function TestResult({navigation, route}) {
   }
   
 
-
-
-
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView vertical={true} style={{backgroundColor: 'rgb(250, 250, 250)', width: '100%', flex: 1, flexDirection:'column', borderRadius: 15}}>
@@ -84,13 +72,23 @@ export default function TestResult({navigation, route}) {
         </View>
         <Button title='Save to files' onPress={handleSharePress} disabled={!fileUri}></Button>
         <Text style={{height: 50, fontSize: 20, fontWeight: 'bold', alignSelf: 'baseline', paddingLeft: 30}}>Metrics</Text>
-        <View style={{flex: 1, flexDirection: 'column'}}>
-          {listArr}
-        </View>
+        <FlatList
+        style={{paddingTop: 2}}
+          data={listData}
+          renderItem={({item}) => 
+            <View style={styles.listContainer}>
+              <Text style={styles.listTitle}>{item.key}</Text>
+              <Text style={styles.listText}>{item.value}</Text>
+            </View>
+            }
+        />
+
       </ScrollView>
       
     </SafeAreaView>
   )
+
+
 }
 
 const styles = StyleSheet.create({
@@ -108,7 +106,25 @@ const styles = StyleSheet.create({
 
     
   },
-});
+  listContainer: {
+    height: 65,
+    backgroundColor: 'white', 
+    margin: 10,
+    marginTop: 5,
+    marginBottom: 5, 
+    flex: 1, 
+    borderRadius: 15,
+    padding: 10,
+    flexDirection: 'row',
+    
+    shadowColor: 'black',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+  },
+  listText: {flex: 1, fontSize: 13, alignSelf: 'center', textAlign: 'right', paddingRight: 15},
+  listTitle: {flex: 2, fontSize: 14, fontWeight: 'bold', alignSelf: 'center'}
+  });
 /*
 const styles = StyleSheet.create({
   container: {
