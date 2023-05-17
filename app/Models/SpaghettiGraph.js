@@ -7,9 +7,13 @@ import Plotly from 'react-native-plotly';
 
 export default function SpaghettiGraph(props)  {
     //Median Filter
-    const med_filtered_x = medianFilter(props.x,5);
-    const med_filtered_y = medianFilter(props.y,5);
+    //const med_filtered_x = movingAverageFilter(props.x, 7);
+    //const med_filtered_y = movingAverageFilter(props.y, 7);
 
+    //Moving Average Filter
+    const movingAverageX = movingAverageFilter(props.x, 7);
+    const movingAverageY = movingAverageFilter(props.y, 7);
+    
     //Low-pass + moving avarage filter
     //const com_filtered_x = combine_L_MovAvg_Filter(props.x,100);
     //const com_filtered_y = combine_L_MovAvg_Filter(props.y,100);
@@ -22,8 +26,8 @@ export default function SpaghettiGraph(props)  {
     
     const data = {
         __id: 'up',
-        x: med_filtered_x,
-        y: med_filtered_y,
+        x: movingAverageX,
+        y: movingAverageY,
         type: 'scatter',
         marker: {
           color: 'rgb(54, 73, 153)',
@@ -103,6 +107,35 @@ function medianFilter(x, w) {
   }
   return y;
 };
+
+function movingAverageFilter(x, w) {
+  console.log("000")
+  y = [];
+  const hw = Math.floor(w/2)
+  var avg = 0;
+  console.log("111")
+  for (let i = 0; i < hw; i++) {
+    const sublist = x.slice(i, i+hw)
+    avg = sublist.reduce((a, b) => a + b, 0) / sublist.length;
+    y.push(avg)
+  }
+  console.log("222")
+  
+  for (let i = Math.floor(w/2); i < x.length - Math.floor(w/2); i++) {
+    const sublist = x.slice(i - hw, i + hw + 1)
+    avg = sublist.reduce((a, b) => a + b, 0) / sublist.length;
+    y.push(avg)
+  }
+  console.log("333")
+
+  for (let i = x.length - Math.floor(w/2); i < x.length; i++) {
+    const sublist = x.slice(i - hw, i)
+    avg = sublist.reduce((a, b) => a + b, 0) / sublist.length;
+    y.push(avg)
+  }
+  console.log("444")
+  return y
+}
 
 
 function combine_L_MovAvg_Filter(data,sampleRate) {
