@@ -5,6 +5,26 @@ import colors from '../config/colors';
 import AppText from '../components/AppText';
 import { LinearGradient } from 'expo-linear-gradient';
 import TestSelectButton from '../components/TestSelectButton';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NavigationContainer } from '@react-navigation/native';
+
+function HomeScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Home!</Text>
+    </View>
+  );
+}
+
+function SettingsScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Settings!</Text>
+    </View>
+  );
+}
+
+const Tab = createBottomTabNavigator();
 
 export default function TestChoiceScreen({navigation,route}) {
 
@@ -28,12 +48,14 @@ export default function TestChoiceScreen({navigation,route}) {
           <AppText style= {styles.headerText}>Take a test </AppText>
         </View>
         <ScrollView vertical={true} style={{backgroundColor: 'rgb(250, 250, 250)', width: '100%', flex: 1, flexDirection:'column', borderRadius: 15}}>
-        <TestSelectButton title="Balance Test"  style={styles.redirect} onPress={() => navigation.navigate('BalanceTestScreen')} imgSource = {require("../assets/balance_button_figure.png")}  />
+        <TestSelectButton title="Balance Test"  style={styles.redirect} onPress={() => navigation.navigate('OnboardingScreen')} imgSource = {require("../assets/balance_button_figure.png")}  />
         <TestSelectButton title="Questionnaire"  style={styles.redirect} onPress={() => navigation.navigate('TestChoiceScreen')} imgSource = {require("../assets/questionnaire_fig.png")}/>
         <TestSelectButton title="Test 3"  style={styles.redirect} onPress={() => navigation.navigate('TestChoiceScreen')}  />
         <TestSelectButton title="Test 4"  style={styles.redirect} onPress={() => navigation.navigate('TestChoiceScreen')}  />
 
         </ScrollView>
+     
+      
 
     </Screen>
   )

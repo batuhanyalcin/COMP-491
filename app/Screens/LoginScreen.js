@@ -67,6 +67,7 @@ export default function LoginScreen({navigation,route}) {
      style={styles.logo}
      source={require("../assets/logo.png")}
      />
+     <AppText>Welcome to Balance App</AppText>
      <Form
      initialValues={{
        email:'',

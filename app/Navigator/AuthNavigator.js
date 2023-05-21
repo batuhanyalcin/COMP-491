@@ -12,6 +12,7 @@ import OldTests from '../Screens/OldTests';
 import TestResult from '../Screens/TestResult';
 import TestScreen from '../Screens/TestScreen';
 import AboutUsScreen from '../Screens/AboutUsScreen';
+import OnboardingScreen from '../Screens/OnboardingScreen';
 
 
 
@@ -25,6 +26,7 @@ export default function AuthNavigator() {
         <Stack.Screen name='RegisterScreen' component={RegisterScreen} />
         <Stack.Screen name='ForgotPassword' component={ForgotPassword} />
         <Stack.Screen name="TestChoiceScreen" component={TestChoiceScreen} />
+        <Stack.Screen name="OnboardingScreen" component={OnboardingScreen} />
         <Stack.Screen name="BalanceTestScreen" component={BalanceTestScreen} />
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
         <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
