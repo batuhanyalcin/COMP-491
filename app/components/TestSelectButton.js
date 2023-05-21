@@ -10,7 +10,7 @@ export default function TestSelectButton({title,onPress,imgSource}) {
    onPress={onPress}
    >
      <LinearGradient
-        colors={['#36c9bb', '#2fc7dd']}
+        colors={['rgba(0, 255, 255, 0.3)', 'rgba(0, 186, 255, 0.6)']}
         useAngle={true}
         angle={60}
         angleCenter={{ x: 0, y: 1 }}
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     button : {
         justifyContent:'center',
         padding: 10,
-        height: 160,
+        height: 150,
         width:"100%",
         marginVertical:10,
         flexDirection: 'row',
@@ -40,12 +40,13 @@ const styles = StyleSheet.create({
     
     },
     figure:{
-       marginLeft: -20,
+       
+       marginRight: 15
         
     },
     text : {
         color :colors.white,
-        fontSize:20,
+        fontSize:28,
         fontWeight:900
     }
 })
