@@ -34,7 +34,7 @@ export default function TestChoiceScreen({navigation,route}) {
         <View style = {styles.logo}>
          <LinearGradient
             colors={['#d1eeae', '#94bbe9']}
-            style={[styles.centered, {borderRadius:60}]}
+            style={[styles.centered, {borderRadius:30}]}
             useAngle={true}
             angle={60}
             start={{ x: 0, y: 0 }}
