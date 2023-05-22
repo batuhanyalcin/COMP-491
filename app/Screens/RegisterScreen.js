@@ -9,18 +9,27 @@ import { ErrorMessage, Form,FormField,SubmitButton,FormImagePicker } from '../co
 import Screen from '../components/Screen';
 import useApi from '../hooks/useApi';
 import authApi from "../api/auth";
+import Button from '../components/Button';
+//import post from '../../NodeJS/server'
 
 
 import axios from 'axios';
 import Firebase, { createUserProfile } from '../config/firebase';
+
+
 
 const validationSchema = Yup.object().shape({
   
   name:Yup.string().required().min(1).label("Name"),
   Phone_no:Yup.number().required().min(10).label("Phone no."),
   email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-  images: Yup.array().min(1, "Please Select Atleast on Image"),
-  password: Yup.string().required().min(4).label("Password")
+  image: Yup.array().min(1, "Please Select Atleast on Image"),
+  password: Yup.string().required().min(4).label("Password"),
+  gender: Yup.string().required().min(1).label("Gender"),
+  age: Yup.number().required().min(1).label("Age"),
+  weight: Yup.number().required().min(1).label("Weight"),
+  height:Yup.number().required().min(1).label("Height")
+  
 })
 
 
@@ -28,8 +37,21 @@ export default function RegisterScreen({navigation}) {
   const auth = useAuth();
   const [error, setError] = useState();
   const [loading,setLoading] =useState(false);
+  const [name, setName] = useState("");
+  const [Phone_no, setPhoneNo] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [gender, setGender] = useState("");
+  const [age, setAge] = useState("");
+  const [weight, setWeight] = useState("");
+  const [height, setHeight] = useState("");
+  const [image, setImage] = useState("");
 
-  const HandleSubmit = () => {
+
+  const HandleSubmit = async() => {
+    console.log("In handle2");
+    //const { name, email, Phone_no, gender, age, weight, height, password } = values;
+   
     /*
     console.warn("This is a test warning");
     console.log("hello");
@@ -45,11 +67,20 @@ export default function RegisterScreen({navigation}) {
       console.log(Constants.manifest.extra.API_URL);
       */
      console.log("In handle");
+     //const express= require('express');
+     //const app=express();
+     //app.use(cors());
       
-
+     //const cors = require('cors');
+     //app.use(cors());
       // Make HTTP POST request to PHP script
+      console.log(name);
+      console.log(email);
+      query = "INSERT into PATIENT (PName, Email, PhoneNumber, Gender, Age, Weight, Height, PPassword, Image) VALUES ('" + name + "', '"+email+"', '"+Phone_no+"', '"+gender+"', '"+age+"', '"+weight+"', '"+height+"', '"+password+"');"
+      console.log(query);
+      axios.defaults.headers.post['Content-Type'] ='application/x-www-form-urlencoded';
       axios
-        .post("./submit.php", {})
+        .post("https://85b9-88-255-99-18.eu.ngrok.io", {query: query,action:"register"})
         .then((response) => {
           console.log(response);
         })
@@ -58,11 +89,12 @@ export default function RegisterScreen({navigation}) {
         });
         
         console.log("Out handle");
+        
    
 
+        
   
 }
-  HandleSubmit();
 
   return (
    <>
@@ -79,31 +111,75 @@ export default function RegisterScreen({navigation}) {
           Phone_no:"",
           email:"",
           images:[],
-          password:""
+          password:"",
+          gender: "",
+          age: "",
+          weight: "",
+          height:""
         }}
           
           onSubmit={HandleSubmit}
         validationSchema={validationSchema}
         >
-            <FormImagePicker name="images" style= {styles.image_picker} />
             
+            <FormField maxLength={255} 
+            name="name" 
+            placeholder="Name"  
+            onChangeText={setName}/>
+            
+            <FormField maxLength={255} 
+            name="email" 
+            placeholder="Email" 
+            onChangeText={setEmail}/>
 
-            
-            <FormField maxLength={255} name="name" placeholder="Name" />
-            <FormField maxLength={255} name="email" placeholder="Email" />
             <FormField
             keyboardType="numeric"
             maxLength={10}
             name="Phone_no"
             placeholder="Phone number"
+            onChangeText={setPhoneNo}
           />
+
      
              <FormField 
-            name="password"
-            placeholder="Password"
-            secureTextEntry={true}
+            maxLength={1}
+            name="gender"
+            placeholder="Gender M for male Female for F"
+            onChangeText={setGender}
             />
-            <SubmitButton title="Register"  onPress={HandleSubmit} />
+
+            <FormField
+            keyboardType="numeric"
+            maxLength={3} 
+            name="weight"
+            placeholder="Weight as Kg."
+            onChangeText={setWeight}
+            />
+
+            <FormField
+            keyboardType="numeric"
+            maxLength={3} 
+            name="height"
+            placeholder="Height as cm"
+            onChangeText={setHeight}
+            />
+
+            <FormField 
+            keyboardType="numeric"
+            maxLength={3} 
+            name="age"
+            placeholder="Age"
+            onChangeText={setAge}
+            />
+            <FormField 
+            name="password"
+            placeholder="Your Password"
+            secureTextEntry={true}
+            onChangeText={setPassword}
+            />
+
+            <Button title="Register" onPress={HandleSubmit}/>
+
             
             <ErrorMessage error={error} />
             </Form>

@@ -23,32 +23,32 @@ export default function LoginScreen({navigation,route}) {
   const [errorMsg,setErrorMsg] = useState(false);
 
   const auth = useAuth();
-  const handleSubmit = async ({email,password}) => {
-    console.log(Constants.manifest.extra.API_URL);
+  const handleSubmit = async ({email, password}) => {
+    console.log(email);
     try {
-      setLoading(true)
-      const user = await Firebase.auth().signInWithEmailAndPassword(email,password);
-       setLoginFailed(false)
-       console.log(user.data);
-       auth.logIn(user.data);
+      setLoading(true);
+      axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+      axios
+        .post("https://85b9-88-255-99-18.eu.ngrok.io", {email: email, action: "login", password: password})
+        .then((response) => {
+          console.log(response);
+          console.log(response.data.result); // Access the result property of the response
+          if (response.data.result) {
+            navigation.navigate('TestChoiceScreen');
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          setErrorMsg(true);
+        })
 
-      setLoading(false)
-      
-      
-     } catch (error) {
+      setLoading(false);
+
+      console.log("Out handle");
+
+    } catch (error) {
       setErrorMsg(true);
-     }
-    try {
-      const user = await axios.post(`${Constants.manifest.extra.API_URL}/user/auth/signin`,{
-          email,
-          password
-      });
-      console.log(user.data);
-      auth.logIn(user.data);
-     } catch (error) {
-      setErrorMsg(true);
-      console.log(error);
-     }
+    }
   }
 
 
