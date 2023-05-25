@@ -2,13 +2,20 @@ import react from "react";
 import { StyleSheet, View, Text } from "react-native";
 
 export default function ListItem(props) {
-
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>{props.text}</Text>
+      <Text style={styles.text}>{props.value}</Text>
+    </View>
+  )
+    /*
     return (
         <View style={styles.container}>
             {props.title ? <Text style={styles.title}>{props.title}</Text> : null}
             {props.items.map((item => <Text style={styles.text}>{item}</Text>))}
       </View>
     )
+    */
 }
 
 const styles = StyleSheet.create({

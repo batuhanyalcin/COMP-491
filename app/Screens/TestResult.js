@@ -34,6 +34,12 @@ export default function TestResult({navigation, route}) {
     {key: "Mean Velocity (m/s) (Sagittal)", value: pc.calculateMeanVelocity(accX, accZ, dts).meanVelZ.toFixed(4)}
   ]
   
+  const listArr = []
+  for (let i = 0; i < listData.length; i++) {
+    listArr.push(
+      <ListItem key={i} text={listData[i].key} value={listData[i].value} />
+    )
+  }
 
   var csvString = "accX, accZ\n"
   for (let i = 0; i < accX.length; i++) {
@@ -80,16 +86,9 @@ export default function TestResult({navigation, route}) {
         </View>
         <Button title='Save to files' onPress={handleSharePress} disabled={!fileUri}></Button>
         <Text style={{height: 50, fontSize: 20, fontWeight: 'bold', alignSelf: 'baseline', paddingLeft: 30}}>Metrics</Text>
-        <FlatList
-        style={{paddingTop: 2}}
-          data={listData}
-          renderItem={({item}) => 
-            <View style={styles.listContainer}>
-              <Text style={styles.listTitle}>{item.key}</Text>
-              <Text style={styles.listText}>{item.value}</Text>
-            </View>
-            }
-        />
+        <View style={{flex: 1, flexDirection: 'column'}}>
+          {listArr}
+        </View>
 
       </ScrollView>
       
