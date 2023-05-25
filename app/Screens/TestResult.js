@@ -7,6 +7,7 @@ import ListItem from '../components/ListItem'
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
+import axios from 'axios';
 
 
 
@@ -75,6 +76,22 @@ export default function TestResult({navigation, route}) {
       console.error('Error sharing file: ', error);
     }
   }
+
+  async function handleDatabasePress() {
+    const date = new Date();
+    console.log(date);
+    query = "INSERT INTO TESTRESULT (PathLength, PathLengthCor, PathLengthSag, NormalizedPathLength, Jerk, JerkCor, JerkSag, MeanVel, MeanVelCor, MeanVelSag, AccX, AccZ, PatientID) VALUES ('"+ tableContent.tableData[0] +"','"+ tableContent.tableData[1] +"','"+ tableContent.tableData[2] +"','"+ tableContent.tableData[3] +"','"+ tableContent.tableData[4] +"','"+ tableContent.tableData[5] +"','"+ tableContent.tableData[6] +"','"+ tableContent.tableData[7] +"','"+ tableContent.tableData[8] +"','"+ tableContent.tableData[9] +"','"+JSON.stringify(accX)+"', '"+JSON.stringify(accZ)+"', '1')";
+    console.log(query);
+    axios.defaults.headers.post['Content-Type'] ='application/x-www-form-urlencoded';
+    axios
+      .post("https://0da3-88-255-99-19.eu.ngrok.io", {query: query, action:"test_result_entry"})
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
   
 
   return (
@@ -85,6 +102,7 @@ export default function TestResult({navigation, route}) {
           <SpaghettiGraph x={accX} y={accZ} style={{margin: 10}}/>
         </View>
         <Button title='Save to files' onPress={handleSharePress} disabled={!fileUri}></Button>
+        <Button title='Add to Database' onPress={handleDatabasePress} disabled={!fileUri}></Button>
         <Text style={{height: 50, fontSize: 20, fontWeight: 'bold', alignSelf: 'baseline', paddingLeft: 30}}>Metrics</Text>
         <View style={{flex: 1, flexDirection: 'column'}}>
           {listArr}
