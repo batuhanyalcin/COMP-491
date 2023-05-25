@@ -10,8 +10,6 @@ import Screen from '../components/Screen';
 import useApi from '../hooks/useApi';
 import authApi from "../api/auth";
 import Button from '../components/Button';
-//import post from '../../NodeJS/server'
-
 
 import axios from 'axios';
 import Firebase, { createUserProfile } from '../config/firebase';
@@ -49,7 +47,7 @@ export default function RegisterScreen({navigation}) {
 
 
   const HandleSubmit = async() => {
-    console.log("In handle2");
+    console.log(Login.db_link);
     //const { name, email, Phone_no, gender, age, weight, height, password } = values;
    
     /*
@@ -76,11 +74,11 @@ export default function RegisterScreen({navigation}) {
       // Make HTTP POST request to PHP script
       console.log(name);
       console.log(email);
-      query = "INSERT into PATIENT (PName, Email, PhoneNumber, Gender, Age, Weight, Height, PPassword, Image) VALUES ('" + name + "', '"+email+"', '"+Phone_no+"', '"+gender+"', '"+age+"', '"+weight+"', '"+height+"', '"+password+"');"
+      query = "INSERT into PATIENT (PName, Email, PhoneNumber, Gender, Age, Weight, Height, PPassword) VALUES ('" + name + "', '"+email+"', '"+Phone_no+"', '"+gender+"', '"+age+"', '"+weight+"', '"+height+"', '"+password+"');"
       console.log(query);
       axios.defaults.headers.post['Content-Type'] ='application/x-www-form-urlencoded';
       axios
-        .post("https://85b9-88-255-99-18.eu.ngrok.io", {query: query,action:"register"})
+        .post("https://b1fa-88-255-99-19.eu.ngrok.io", {query: query,action:"register"})
         .then((response) => {
           console.log(response);
         })

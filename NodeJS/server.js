@@ -13,6 +13,7 @@ user: "admin", // user name to your mysql database
 password: "eebgm491",// corresponding password
 database: "balancemonitoringdb" // use the specified database
 });
+
 // make to connection to the database.
 con.connect(function(err) {
     if (err) throw err;
@@ -31,7 +32,7 @@ app.post('/', (req,res)=>{
     //var records = [[req.body.name, req.body.rollno]];
     //if(records[0][0]!=null)
     //{
-        if(req.body.action == "register"){
+        if(req.body.action == "register" || req.body.action == "test_result_entry"){
         var query = req.body.query;
         console.log(query);
         con.query(query);

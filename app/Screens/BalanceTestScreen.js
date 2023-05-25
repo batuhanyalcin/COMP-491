@@ -13,7 +13,7 @@ export default function BalanceTestScreen({navigation,route}) {
   //const [graphComp, setGraphComp] = useState(<View></View>)
   //const [subscription, setSubscription] = useState(null);
   const dt = 0.01 // seconds
-  const totalTime = 30 // seconds
+  const totalTime = 10 // seconds
   const numOfIterations = Math.floor(totalTime / dt)
   var i = 0
   var isRemainingTimeSpeaking = false

@@ -12,6 +12,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Constants  from 'expo-constants';
 import Firebase from '../config/firebase';
 
+
 const validationSchema = Yup.object().shape({
   email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
   password: Yup.string().max(255).required('Password is required')
@@ -29,7 +30,7 @@ export default function LoginScreen({navigation,route}) {
       setLoading(true);
       axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
       axios
-        .post("https://85b9-88-255-99-18.eu.ngrok.io", {email: email, action: "login", password: password})
+        .post("https://b1fa-88-255-99-19.eu.ngrok.io", {email: email, action: "login", password: password})
         .then((response) => {
           console.log(response);
           console.log(response.data.result); // Access the result property of the response
