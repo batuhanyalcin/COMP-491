@@ -8,6 +8,7 @@ import Svg, { Path, LinearGradient, Stop, Defs } from 'react-native-svg';
 const accX = [];
 const accY = [];
 const accZ = [];
+const milliseconds = [];
 export default function BalanceTestScreen({navigation,route}) {
   const [data, setData] = useState({});
 
@@ -32,6 +33,7 @@ export default function BalanceTestScreen({navigation,route}) {
       accX.push(devicemotionData.acceleration.x)
       accY.push(devicemotionData.acceleration.y)
       accZ.push(devicemotionData.acceleration.z)
+      milliseconds.push(Date.now())
     });
     DeviceMotion.setUpdateInterval(dt * 1000)
   };
@@ -80,18 +82,20 @@ export default function BalanceTestScreen({navigation,route}) {
     //setGraphComp(<SpaghettiGraph x={accX} y={accZ}/>)
     setTestEnded(true)
 
-    navigation.replace('TestResult', {accX: accX, accZ: accZ, duration: totalTime, dt: dt})
+    navigation.replace('TestResult', {accX: accX, accZ: accZ, duration: totalTime, milliseconds: milliseconds})
   }
 
   const _unsubscribe = () => {
     DeviceMotion.removeAllListeners();
   };
-  /*
+
   useEffect(() => {
-    _subscribe();
-    return () => _unsubscribe();
-  }, []);s
-  */
+    return () => {
+      DeviceMotion.removeAllListeners();
+    }
+  }, []
+    
+  )
 
 
   const [isPlaying, setIsPlaying] = React.useState(false)

@@ -1,23 +1,24 @@
-export function calculateDerivative(y, dx) {
+export function calculateDerivative(y, dxs) {
     var dydx = Array(y.length)
 
     // Forward FD for left end node
-    dydx[0] = (-y[2] + 4*y[1] - 3*y[0]) / (2 * dx)
+    dydx[0] = (-y[2] + 4*y[1] - 3*y[0]) / (dxs[0] + dxs[1])
 
     // Central FD for internal nodes
     var i
     for (i = 1; i < y.length - 1; i++) {
-      dydx[i] = (y[i+1] - y[i-1]) / (2 * dx)
+        dydx[i] = (y[i+1] - y[i-1]) / (dxs[i-1] + dxs[i])
     }
 
     // Backward FD for right end node
-    dydx[dydx.length - 1] = -(-y[i-2] + 4*y[i-1] - 3*y[i]) / (2 * dx)
-    
+    dydx[dydx.length - 1] = -(-y[y.length - 3] + 4*y[y.length - 2] - 3*y[y.length - 1]) / (dxs[dxs.length - 1] + dxs[dxs.length - 2])
+    console.log(dxs[dxs.length - 1])
     return dydx
 }
 
-export function calculateIntegral(y, dx) {
+export function calculateIntegral(y, dxs) {
     // Integrate using Simpson's 1/3 Rule
+    /*
     var yI = y[0]
 
     for (i = 1; i < y.length - 1; i++) {
@@ -28,20 +29,33 @@ export function calculateIntegral(y, dx) {
 
     yI *= dx / 3
     return yI
+    */
+    // Trapezoid Method
+    var integral = 0
+    for (let i = 0; i < y.length - 1; i++) {
+        integral += (y[i] + y[i+1]) * dxs[i] / 2 
+    }
+    return integral
 
 }
 
-export function rungeKuttaIntegral(y,dt) {
+export function rungeKuttaIntegral(y,dts) {
     // Initialize array
     const yI = new Array(y.length).fill(0)
-
+    /*
     for (let i = 1; i < y.length; i++) {
+        const dt = dts[i-1];
         const k1 = y[i-1];
         const k2 = y[i-1] + 0.5 * k1 * dt;
         const k3 = y[i-1] + 0.5 * k2 *dt;
         const k4 = y[i-1] + k3 * dt;
         
         yI[i] = yI[i-1] + (1 / 6) * (k1 + 2*k2 + 3*k3 + k4) * dt;
+    }
+    */
+    for (let i = 1; i < y.length; i++) {
+        yI[i] = yI[i - 1] + (y[i - 1] + y[i]) * dts[i-1] / 2
+        //yI[i] = y[i-1] + calculateIntegral(y.slice(i - 1,i + 1), dts.slice(i-1, i))
     }
 
     return yI
@@ -114,6 +128,7 @@ export function calculateJerk(x, z, dt) {
     // Calculate derivative of x and y
     const dAccX = calculateDerivative(x, dt)
     const dAccZ =  calculateDerivative(z, dt)
+    
 
     // Take square of jerk
     const dAccX2 = dAccX.map(a => a**2)
@@ -138,9 +153,9 @@ export function calculateMeanVelocity(x, z, dt) {
     const velZ = rungeKuttaIntegral(z, dt)
 
     // Calulcate mangitude of velocity
-    const vel = new Array(x.length)
-    for (let i = 0; i < x.length; i++) {
-        vel[i] = Math.sqrt(x[i]**2 + z[i]**2)
+    const vel = new Array(velX.length)
+    for (let i = 0; i < velX.length; i++) {
+        vel[i] = Math.sqrt(velX[i]**2 + velZ[i]**2)
     }
 
     // Calculate mean velocity
