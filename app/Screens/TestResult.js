@@ -8,7 +8,8 @@ import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import axios from 'axios';
-
+import {setDbLink, getDbLink} from '../config/dblink'
+import {getPatientID} from '../config/user'
 
 
 export default function TestResult({navigation, route}) {
@@ -35,6 +36,7 @@ export default function TestResult({navigation, route}) {
     {key: "Mean Velocity (m/s) (Sagittal)", value: pc.calculateMeanVelocity(accX, accZ, dts).meanVelZ.toFixed(4)}
   ]
   
+
 
   var csvString = "accX, accZ\n"
   for (let i = 0; i < accX.length; i++) {
@@ -74,11 +76,27 @@ export default function TestResult({navigation, route}) {
   async function handleDatabasePress() {
     const date = new Date();
     console.log(date);
-    query = "INSERT INTO TESTRESULT (PathLength, PathLengthCor, PathLengthSag, NormalizedPathLength, Jerk, JerkCor, JerkSag, MeanVel, MeanVelCor, MeanVelSag, AccX, AccZ, PatientID) VALUES ('"+ tableContent.tableData[0] +"','"+ tableContent.tableData[1] +"','"+ tableContent.tableData[2] +"','"+ tableContent.tableData[3] +"','"+ tableContent.tableData[4] +"','"+ tableContent.tableData[5] +"','"+ tableContent.tableData[6] +"','"+ tableContent.tableData[7] +"','"+ tableContent.tableData[8] +"','"+ tableContent.tableData[9] +"','"+JSON.stringify(accX)+"', '"+JSON.stringify(accZ)+"', '1')";
+    //query = "INSERT INTO TESTRESULT (PathLength, PathLengthCor, PathLengthSag, NormalizedPathLength, Jerk, JerkCor, JerkSag, MeanVel, MeanVelCor, MeanVelSag, AccX, AccZ, PatientID) VALUES ('"+ listData.find(item => item.key === "Normalized Path Length (s^3/m)").value +"','"+ tableContent.tableData[1] +"','"+ tableContent.tableData[2] +"','"+ tableContent.tableData[3] +"','"+ tableContent.tableData[4] +"','"+ tableContent.tableData[5] +"','"+ tableContent.tableData[6] +"','"+ tableContent.tableData[7] +"','"+ tableContent.tableData[8] +"','"+ tableContent.tableData[9] +"','"+JSON.stringify(accX)+"', '"+JSON.stringify(accZ)+"', '1')";
+    const query = `INSERT INTO TESTRESULT 
+  (PathLength, PathLengthCor, PathLengthSag, NormalizedPathLength, Jerk, JerkCor, JerkSag, MeanVel, MeanVelCor, MeanVelSag, AccX, AccZ, PatientID) 
+  VALUES 
+  ('${listData.find(item => item.key === "Path Length (m/s^2)").value}', 
+  '${listData.find(item => item.key === "Path Length (Coronal) (m/s^2)").value}', 
+  '${listData.find(item => item.key === "Path Length (Sagittal) (m/s^2)").value}', 
+  '${listData.find(item => item.key === "Normalized Path Length (s^3/m)").value}', 
+  '${listData.find(item => item.key === "Jerk (m^2/s^5)").value}', 
+  '${listData.find(item => item.key === "Jerk (m^2/s^5) (Coronal)").value}', 
+  '${listData.find(item => item.key === "Jerk (m^2/s^5) (Sagittal)").value}', 
+  '${listData.find(item => item.key === "Mean Velocity (m/s)").value}', 
+  '${listData.find(item => item.key === "Mean Velocity (m/s) (Coronal)").value}', 
+  '${listData.find(item => item.key === "Mean Velocity (m/s) (Sagittal)").value}', 
+  '${JSON.stringify(accX)}', 
+  '${JSON.stringify(accZ)}', 
+  '${getPatientID()}')`;
     console.log(query);
     axios.defaults.headers.post['Content-Type'] ='application/x-www-form-urlencoded';
     axios
-      .post("https://0da3-88-255-99-19.eu.ngrok.io", {query: query, action:"test_result_entry"})
+      .post(getDbLink(), {query: query, action:"test_result_entry"})
       .then((response) => {
         console.log(response);
       })

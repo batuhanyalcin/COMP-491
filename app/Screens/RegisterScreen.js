@@ -13,6 +13,8 @@ import Button from '../components/Button';
 
 import axios from 'axios';
 import Firebase, { createUserProfile } from '../config/firebase';
+import {setDbLink, getDbLink} from '../config/dblink'
+import {getPatientID} from '../config/user'
 
 
 
@@ -47,7 +49,6 @@ export default function RegisterScreen({navigation}) {
 
 
   const HandleSubmit = async() => {
-    console.log(Login.db_link);
     //const { name, email, Phone_no, gender, age, weight, height, password } = values;
    
     /*
@@ -78,15 +79,17 @@ export default function RegisterScreen({navigation}) {
       console.log(query);
       axios.defaults.headers.post['Content-Type'] ='application/x-www-form-urlencoded';
       axios
-        .post("https://b1fa-88-255-99-19.eu.ngrok.io", {query: query,action:"register"})
+        .post(getDbLink(), {query: query,action:"register"})
         .then((response) => {
           console.log(response);
+          console.log('Navigating');
+          navigation.navigate('LoginScreen');
         })
         .catch((error) => {
           console.log(error);
         });
         
-        console.log("Out handle");
+        console.log(getDbLink());
         
    
 
