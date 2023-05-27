@@ -11,7 +11,9 @@ import axios from 'axios';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Constants  from 'expo-constants';
 import Firebase from '../config/firebase';
-
+import {setPatientID, getPatientID} from '../config/user'
+import {getDbLink} from '../config/dblink'
+import Button from '../components/Button';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
@@ -22,19 +24,22 @@ export default function LoginScreen({navigation,route}) {
   const [loginFailed, setLoginFailed] = useState(false);
   const [loading,setLoading] = useState(false);
   const [errorMsg,setErrorMsg] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const auth = useAuth();
-  const handleSubmit = async ({email, password}) => {
-    console.log(email);
+  const handleSubmit = async () => {
     try {
       setLoading(true);
       axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
       axios
-        .post("https://b1fa-88-255-99-19.eu.ngrok.io", {email: email, action: "login", password: password})
+        .post(getDbLink(), {email: email, action: "login", password: password})
         .then((response) => {
           console.log(response);
           console.log(response.data.result); // Access the result property of the response
           if (response.data.result) {
+            setPatientID(response.data.patientID);
+            console.log(getPatientID())
             navigation.navigate('TestChoiceScreen');
           }
         })
@@ -87,14 +92,16 @@ export default function LoginScreen({navigation,route}) {
        maxLength={255}
        name="email"
        placeholder="Email"
+       onChangeText={setEmail}
      />
      <FormField
        icon="eye-off"
        name="password"
        placeholder="Password"
        secureTextEntry={true}
+       onChangeText={setPassword}
      />
-     <SubmitButton title="Login" />
+     <Button title="Login" onPress={handleSubmit}/>
      <TouchableOpacity style={styles.redirect} onPress={() => navigation.navigate('RegisterScreen')} >
        <Text>Create an account</Text>
      </TouchableOpacity>

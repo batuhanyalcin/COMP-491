@@ -54,8 +54,9 @@ app.post('/', (req,res)=>{
                 if (results.length > 0) {
                   var storedPassword = results[0].PPassword;
                   if (password === storedPassword) {
+                    var patientID = results[0].PatientID;
                     console.log('Email and password matched');
-                    res.json({ result: true });
+                    res.json({ result: true , patientID: patientID});
                   } else {
                     console.log('Password incorrect');
                     res.json({ result: false });
