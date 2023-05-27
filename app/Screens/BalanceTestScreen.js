@@ -92,6 +92,7 @@ export default function BalanceTestScreen({navigation,route}) {
   useEffect(() => {
     return () => {
       DeviceMotion.removeAllListeners();
+      Speech.stop();
     }
   }, []
     
