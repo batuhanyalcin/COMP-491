@@ -8,19 +8,21 @@ import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import axios from 'axios';
-
+import * as Speech from 'expo-speech'
 
 
 export default function TestResult({navigation, route}) {
-  const accX = route.params.accX
-  const accZ = route.params.accZ
+  const accX = pc.movingAverageFilter(pc.movingAverageFilter(route.params.accX, 2), 2);
+  const accZ = pc.movingAverageFilter(pc.movingAverageFilter(route.params.accZ, 2), 2);
+
   const duration = route.params.duration
   const milliseconds = route.params.milliseconds
-  
+  Speech.speak("The test has ended", {language: 'en'})
   const dts = []
   for (let i = 0; i < milliseconds.length - 1; i++) {
     dts.push((milliseconds[i+1] - milliseconds[i]) / 1000)
   }
+
   
   const listData = [
     {key: "Path Length (m/s^2)", value: pc.calculatePathLength(accX, accZ, dts).pl?.toFixed(2)},

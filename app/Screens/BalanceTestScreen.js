@@ -9,14 +9,23 @@ const accX = [];
 const accY = [];
 const accZ = [];
 const milliseconds = [];
+
+const TestState = {
+  TestNotStarted: 0,
+  TestOngoing: 1,
+  TestPaused: 2,
+}
+
 export default function BalanceTestScreen({navigation,route}) {
   const [data, setData] = useState({});
+  
 
   //const [graphComp, setGraphComp] = useState(<View></View>)
   //const [subscription, setSubscription] = useState(null);
+  let testState = TestState.TestNotStarted
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const dt = 0.01 // seconds
-  const totalTime = 10 // seconds
+  const totalTime = 30 // seconds
   const numOfIterations = Math.floor(totalTime / dt)
   var i = 0
   const [isRemainingTimeSpeaking, setIsRemainingTimeSpeaking] = useState(false)
@@ -67,18 +76,12 @@ export default function BalanceTestScreen({navigation,route}) {
           }
           return () => clearInterval(timerId);
         }, 1000)
-        
-        
       }
     })
   }
 
   function onTestEnded() {
     _unsubscribe();
-    
-    Speech.speak("The test has ended", {language: 'en'})
-    console.log("Printed accX")
-    console.log(`Length of accX is: ${accX.length}`)
     //setGraphComp(<SpaghettiGraph x={accX} y={accZ}/>)
     setTestEnded(true)
 
