@@ -18,15 +18,18 @@ export default function TestResult({navigation, route}) {
   const accX = pc.movingAverageFilter(pc.movingAverageFilter(route.params.accX, 14), 10);
   const accZ = pc.movingAverageFilter(pc.movingAverageFilter(route.params.accZ, 14), 10);
 
-  const duration = route.params.duration
+  //const duration = route.params.duration
   const milliseconds = route.params.milliseconds
   Speech.speak("The test has ended", {language: 'en'})
   const dts = []
   for (let i = 0; i < milliseconds.length - 1; i++) {
     dts.push((milliseconds[i+1] - milliseconds[i]) / 1000)
   }
+  const duration = dts.reduce((a, b) => a+b, 0)
+  console.log(`Sum is: ${dts.reduce((a, b) => a+b, 0)}`)
+  console.log("Length of dts is " + dts.length)
+  console.log("length of accX is " + accX.length)
 
-  
   const listData = [
     {key: "Path Length (m/s^2)", value: pc.calculatePathLength(accX, accZ, dts).pl?.toFixed(2)},
     {key: "Path Length (Coronal) (m/s^2)", value: pc.calculatePathLength(accX, accZ, dts).plx?.toFixed(2)},
