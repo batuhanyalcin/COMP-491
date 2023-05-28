@@ -11,8 +11,8 @@ export default function SpaghettiGraph(props)  {
     //const med_filtered_y = movingAverageFilter(props.y, 7);
 
     //Moving Average Filter
-    const movingAverageX = movingAverageFilter(props.x, 7);
-    const movingAverageY = movingAverageFilter(props.y, 7);
+    //const movingAverageX = movingAverageFilter(props.x, 7);
+    //const movingAverageY = movingAverageFilter(props.y, 7);
     
     //Low-pass + moving avarage filter
     //const com_filtered_x = combine_L_MovAvg_Filter(props.x,100);
@@ -26,8 +26,8 @@ export default function SpaghettiGraph(props)  {
     
     const data = {
         __id: 'up',
-        x: movingAverageX,
-        y: movingAverageY,
+        x: props.x,
+        y: props.y,
         type: 'scatter',
         marker: {
           color: 'rgb(54, 73, 153)',

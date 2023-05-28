@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Text, View, ScrollView, Button, FlatList } from 'react-native'
+import { SafeAreaView, StyleSheet, Text, Image, View, ScrollView, Button, FlatList, Touchable, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { Table, TableWrapper, Row, Rows, Col } from 'react-native-table-component'
 import SpaghettiGraph from '../Models/SpaghettiGraph'
@@ -8,21 +8,28 @@ import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import axios from 'axios';
+import * as Speech from 'expo-speech'
 import {setDbLink, getDbLink} from '../config/dblink'
 import {getPatientID} from '../config/user'
+import { LinearGradient } from 'expo-linear-gradient'
 
 
 export default function TestResult({navigation, route}) {
-  const accX = route.params.accX
-  const accZ = route.params.accZ
-  const duration = route.params.duration
+  const accX = pc.movingAverageFilter(pc.movingAverageFilter(route.params.accX, 14), 10);
+  const accZ = pc.movingAverageFilter(pc.movingAverageFilter(route.params.accZ, 14), 10);
+
+  //const duration = route.params.duration
   const milliseconds = route.params.milliseconds
-  
+  Speech.speak("The test has ended", {language: 'en'})
   const dts = []
   for (let i = 0; i < milliseconds.length - 1; i++) {
     dts.push((milliseconds[i+1] - milliseconds[i]) / 1000)
   }
-  
+  const duration = dts.reduce((a, b) => a+b, 0)
+  console.log(`Sum is: ${dts.reduce((a, b) => a+b, 0)}`)
+  console.log("Length of dts is " + dts.length)
+  console.log("length of accX is " + accX.length)
+
   const listData = [
     {key: "Path Length (m/s^2)", value: pc.calculatePathLength(accX, accZ, dts).pl?.toFixed(2)},
     {key: "Path Length (Coronal) (m/s^2)", value: pc.calculatePathLength(accX, accZ, dts).plx?.toFixed(2)},
@@ -113,18 +120,25 @@ export default function TestResult({navigation, route}) {
     <SafeAreaView style={styles.container} >
       <ScrollView overScrollMode='never' vertical={true} style={{backgroundColor: 'rgb(250, 250, 250)', width: '100%', flex: 1, flexDirection:'column', borderRadius: 15}}>
         <Text style={{height: 50, fontSize: 20, fontWeight: 'bold', alignSelf: 'baseline', paddingLeft: 30}}>Test Result</Text>
-        <View style={{flex: 1, height:500, margin: 10, alignItems: 'center', backgroundColor: 'rgba(0,0,0,0)'}}>
+        <View style={{flex: 1, height:480, marginLeft: 10, marginRight: 10, alignItems: 'center', backgroundColor: 'rgba(0,0,0,0)'}}>
           <SpaghettiGraph x={accX} y={accZ} style={{margin: 10}}/>
         </View>
-        <Button title='Save to files' onPress={handleSharePress} disabled={!fileUri}></Button>
-        <Button title='Add to Database' onPress={handleDatabasePress} disabled={!fileUri}></Button>
+        <View style={{height: 90, flexDirection: 'row', paddingLeft: 15, paddingRight: 15, marginBottom: 15}}>
+          <TouchableOpacity style={styles.buttonStyle} onPress={handleSharePress} disabled={!fileUri}> 
+              <Text style={styles.buttonTextStyle}>Share Results</Text>
+              <Image source={require('../assets/upload.png')} style={{width: 30, height: 30, marginLeft: 'auto', marginRight: 'auto', marginBottom: 'auto'}}/>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.buttonStyle} onPress={handleDatabasePress} disabled={!fileUri}> 
+              <Text style={styles.buttonTextStyle}>Save Results</Text>
+              <Image source={require('../assets/diskette.png')} style={{width: 30, height: 30, marginLeft: 'auto', marginRight: 'auto', marginBottom: 'auto'}}/>
+          </TouchableOpacity>
+        </View>
         <Text style={{height: 50, fontSize: 20, fontWeight: 'bold', alignSelf: 'baseline', paddingLeft: 30}}>Metrics</Text>
         <View style={{flex: 1, flexDirection: 'column'}}>
           {listArr}
         </View>
 
       </ScrollView>
-      
     </SafeAreaView>
   )
 
@@ -163,8 +177,30 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
   },
   listText: {flex: 1, fontSize: 13, alignSelf: 'center', textAlign: 'right', paddingRight: 15},
-  listTitle: {flex: 2, fontSize: 14, fontWeight: 'bold', alignSelf: 'center'}
-  });
+  listTitle: {flex: 2, fontSize: 14, fontWeight: 'bold', alignSelf: 'center'},
+  buttonStyle: {
+    flex: 1,
+    marginLeft: 10,
+    marginRight: 10,
+    borderRadius: 13,
+    shadowColor: '#171717',
+    shadowOffset: {width: 0, height: 4},
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 8,
+    backgroundColor: '#0e3363'
+  },
+  buttonTextStyle: {
+    fontSize: 18,
+    color: 'white',
+    fontWeight: "bold",
+    alignSelf: "center",
+    marginTop: 'auto',
+    marginBottom: 10,
+
+  },
+
+});
 /*
 const styles = StyleSheet.create({
   container: {

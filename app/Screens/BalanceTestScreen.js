@@ -1,22 +1,31 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, Button} from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import * as Speech from 'expo-speech'
 import { DeviceMotion } from 'expo-sensors';
 import { CountdownCircleTimer, useCountdown } from 'react-native-countdown-circle-timer';
 import Svg, { Path, LinearGradient, Stop, Defs } from 'react-native-svg';
+import Button from '../components/Button';
+
 //import Button from '../components/Button'
-const accX = [];
-const accY = [];
-const accZ = [];
-const milliseconds = [];
+let accX = [];
+let accY = [];
+let accZ = [];
+let milliseconds = [];
+
+
+
+
 export default function BalanceTestScreen({navigation,route}) {
   const [data, setData] = useState({});
+  
 
   //const [graphComp, setGraphComp] = useState(<View></View>)
   //const [subscription, setSubscription] = useState(null);
+  
+ 
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const dt = 0.01 // seconds
-  const totalTime = 10 // seconds
+  const totalTime = 30 // seconds
   const numOfIterations = Math.floor(totalTime / dt)
   var i = 0
   const [isRemainingTimeSpeaking, setIsRemainingTimeSpeaking] = useState(false)
@@ -27,6 +36,20 @@ export default function BalanceTestScreen({navigation,route}) {
 
   const [testEnded, setTestEnded] = useState(false)
   
+  const [isPlaying, setIsPlaying] = React.useState(false)
+  const [timePassed, setTimePassed] = React.useState(0.0)
+  const duration = totalTime
+  const {
+    path,
+    pathLength,
+    stroke,
+    strokeDashoffset,
+    remainingTime,
+    elapsedTime,
+    size,
+    strokeWidth,
+  } = useCountdown({ isPlaying: isPlaying, duration, colors: 'url(#your-unique-id)'})
+
   const _subscribe = () => {
     DeviceMotion.addListener((devicemotionData) => {
       setData(devicemotionData.acceleration);
@@ -57,6 +80,8 @@ export default function BalanceTestScreen({navigation,route}) {
               Speech.speak(timerRef.current.toString(), {language: 'en'})
             }
             else {
+              setTestState(TestState.TestOngoing)
+              setButtonDisabled(false)
               Speech.speak("The test has started.", {language: 'en'})
               i = 0;
               setIsPlaying(true);
@@ -67,18 +92,20 @@ export default function BalanceTestScreen({navigation,route}) {
           }
           return () => clearInterval(timerId);
         }, 1000)
-        
-        
       }
     })
   }
 
+  function pauseTest() {
+    setTestState(TestState.TestPaused)
+    setIsPlaying(false);
+    _unsubscribe();
+    setTestEnded(true)
+    console.log(`Time passed is: ${timePassed}`)
+  }
+
   function onTestEnded() {
     _unsubscribe();
-    
-    Speech.speak("The test has ended", {language: 'en'})
-    console.log("Printed accX")
-    console.log(`Length of accX is: ${accX.length}`)
     //setGraphComp(<SpaghettiGraph x={accX} y={accZ}/>)
     setTestEnded(true)
 
@@ -93,52 +120,57 @@ export default function BalanceTestScreen({navigation,route}) {
     return () => {
       DeviceMotion.removeAllListeners();
       Speech.stop();
+      accX = [];
+      accY = [];
+      accZ = [];
+      milliseconds = [];
+
+     
     }
   }, []
-    
   )
 
+  const TestState = {
+    TestNotStarted: {buttonText: "Start Test", buttonColor: ['#090979', '#00d4ff'], buttonFunction: startTest},
+    TestOngoing: {buttonText: "Pause Test", buttonColor: ['#C10B2B', '#890FBD'], buttonFunction: pauseTest },
+    TestPaused: {buttonText: "See Results", buttonColor: ['#187a43', '#0e98ad'], buttonFunction: onTestEnded },
+  }
+  
+  const [testState, setTestState] = useState(TestState.TestNotStarted)
 
-  const [isPlaying, setIsPlaying] = React.useState(false)
-  const duration = totalTime
-  const {
-    path,
-    pathLength,
-    stroke,
-    strokeDashoffset,
-    remainingTime,
-    elapsedTime,
-    size,
-    strokeWidth,
-  } = useCountdown({ isPlaying: isPlaying, duration, colors: 'url(#your-unique-id)' })
+ 
   
   return (
     <View style={styles.container}>
       <View style={{ width: size, height: size, position: 'relative' }}>
         <CountdownCircleTimer
+        strokeWidth={7}
         isPlaying={isPlaying}
         duration={totalTime}
         colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
         colorsTime={[10, 6, 3, 0]}
         onComplete={onTestEnded}
-    >
-      {({ remainingTime, color }) => {
-        if (remainingTime == 5 && !isRemainingTimeSpeaking) {
-          console.log(isRemainingTimeSpeaking)
-          setIsRemainingTimeSpeaking(true)
-          console.log(isRemainingTimeSpeaking)
-          Speech.speak("5 seconds remaining.", {language: 'en'})
+        elapsedTime={elapsedTime}
+        >
+        {({ remainingTime, color }) => {
+
+          if (remainingTime == 5 && !isRemainingTimeSpeaking) {
+            console.log(isRemainingTimeSpeaking)
+            setIsRemainingTimeSpeaking(true)
+            console.log(isRemainingTimeSpeaking)
+            Speech.speak("5 seconds remaining.", {language: 'en'})
+          }
+          return (
+          <Text style={{ color, fontSize: 40, fontWeight: 'bold' }}>
+            {remainingTime}
+          </Text>
+          )
+          }
         }
-        return (
-        <Text style={{ color, fontSize: 40 }}>
-          {remainingTime}
-        </Text>
-        )
-      }
-    }
-    </CountdownCircleTimer>
+        </CountdownCircleTimer>
       </View>
-      <Button title='Start Test' style={styles.button} onPress={startTest} disabled={buttonDisabled}></Button>
+      
+      <Button title={testState.buttonText} style={styles.button} onPress={testState.buttonFunction} disabled={buttonDisabled} colors={buttonDisabled ? ['#000000', '#ffffff'] : testState.buttonColor} />
     </View>
   );
 }

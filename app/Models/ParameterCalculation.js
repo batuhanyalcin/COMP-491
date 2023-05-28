@@ -167,3 +167,33 @@ export function calculateMeanVelocity(x, z, dt) {
     }
 
 }
+
+
+export function movingAverageFilter(x, w) {
+    console.log("000")
+    y = [];
+    const hw = Math.floor(w/2)
+    var avg = 0;
+    console.log("111")
+    for (let i = 0; i < hw; i++) {
+      const sublist = x.slice(i, i+hw)
+      avg = sublist.reduce((a, b) => a + b, 0) / sublist.length;
+      y.push(avg)
+    }
+    console.log("222")
+    
+    for (let i = Math.floor(w/2); i < x.length - Math.floor(w/2); i++) {
+      const sublist = x.slice(i - hw, i + hw + 1)
+      avg = sublist.reduce((a, b) => a + b, 0) / sublist.length;
+      y.push(avg)
+    }
+    console.log("333")
+  
+    for (let i = x.length - Math.floor(w/2); i < x.length; i++) {
+      const sublist = x.slice(i - hw, i)
+      avg = sublist.reduce((a, b) => a + b, 0) / sublist.length;
+      y.push(avg)
+    }
+    console.log("444")
+    return y
+  }
