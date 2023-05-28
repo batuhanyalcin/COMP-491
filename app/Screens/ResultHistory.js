@@ -1,5 +1,5 @@
 import { SafeAreaView, StyleSheet, Text, View, ScrollView, Button, FlatList} from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Table, TableWrapper, Row, Rows, Col } from 'react-native-table-component'
 import SpaghettiGraph from '../Models/SpaghettiGraph'
 import * as pc from '../Models/ParameterCalculation'
@@ -20,26 +20,28 @@ export default function ResultHistory({navigation, route}) {
     const [testResult, setTestResult] = useState({
       accX: getAccX(),
       accZ: getAccZ(),
+      spaghettiGraphComp: <SpaghettiGraph x={getAccX()} y={getAccZ()} style={{margin: 10}}/>,
       listArr: getListArr()
     })
 
+    useEffect(() => {
+
+    }, [testResult]); 
+
     function handleOptionChange(e) {
       setAccX(JSON.parse(getQueryResult()[e].AccX));
-      setTestResult({
-        ...testResult,
-        accX: getAccX()
-      });
-
+      console.log(getAccX()[0]);
       setAccZ(JSON.parse(getQueryResult()[e].AccZ));
-      setTestResult({
-        ...testResult,
-        accZ: getAccZ()
-      });
-
       setListArr(getQueryResult(), e);
+
       setTestResult({
         ...testResult,
-        listArr: getListArr()
+        
+        listArr: getListArr(),
+        accZ: getAccZ(),
+        accX: getAccX(),
+        //spaghettiGraphComp: <Text style={{height: 50, fontSize: 20, fontWeight: 'bold', alignSelf: 'baseline', paddingLeft: 30}}>New Change</Text>
+        spaghettiGraphComp: <SpaghettiGraph x={getAccX()} y={getAccZ()} style={{margin: 10}}/>
       });
     }
 
@@ -66,7 +68,7 @@ export default function ResultHistory({navigation, route}) {
               }}
           />
           <View style={{flex: 1, height:500, margin: 10, alignItems: 'center', backgroundColor: 'rgba(0,0,0,0)'}}>
-              <SpaghettiGraph x={testResult.accX} y={testResult.accZ} style={{margin: 10}}/>
+              {testResult.spaghettiGraphComp}
           </View>
           <Text style={{height: 50, fontSize: 20, fontWeight: 'bold', alignSelf: 'baseline', paddingLeft: 30}}>Metrics</Text>
           <View style={{flex: 1, flexDirection: 'column'}}>
