@@ -59,6 +59,7 @@ export default function TestChoiceScreen({navigation,route}) {
   
               navigation.navigate('ResultHistory');
             }
+            
           }
         })
         .catch((error) => {
