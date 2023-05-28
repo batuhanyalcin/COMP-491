@@ -11,7 +11,7 @@ import axios from 'axios';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Constants  from 'expo-constants';
 import Firebase from '../config/firebase';
-import {setPatientID, getPatientID} from '../config/user'
+import {setPatientID, getPatientID, setPatientName, getPatientName} from '../config/user'
 import {getDbLink} from '../config/dblink'
 import Button from '../components/Button';
 
@@ -39,7 +39,9 @@ export default function LoginScreen({navigation,route}) {
           console.log(response.data.result); // Access the result property of the response
           if (response.data.result) {
             setPatientID(response.data.patientID);
-            console.log(getPatientID())
+            setPatientName(response.data.pName);
+            //console.log(getPatientID())
+            //console.log(getPatientName())
             navigation.navigate('TestChoiceScreen');
           }
         })

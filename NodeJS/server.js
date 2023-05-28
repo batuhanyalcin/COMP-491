@@ -55,8 +55,10 @@ app.post('/', (req,res)=>{
                   var storedPassword = results[0].PPassword;
                   if (password === storedPassword) {
                     var patientID = results[0].PatientID;
+                    var pName = results[0].PName;
                     console.log('Email and password matched');
-                    res.json({ result: true , patientID: patientID});
+                    //console.log(patientID);
+                    res.json({ result: true , patientID: patientID, pName: pName});
                   } else {
                     console.log('Password incorrect');
                     res.json({ result: false });
@@ -67,6 +69,27 @@ app.post('/', (req,res)=>{
                 }
               }
             });
+         }
+
+
+         if (req.body.action == "test_result_retrieval") {
+          var query = req.body.query;
+          con.query(query, function (error, results, fields) {
+            if (error) {
+              console.log(error);
+              res.status(500).json({result:"error", error: 'An error occurred while executing the query.' });
+            }
+            else {
+              if (results.length > 0) {
+                //console.log(results);
+                res.json({ result: true, queryResult: results });
+              } else {
+                console.log('Patient not found');
+                res.json({ result: false });
+              }
+            }
+          });
+
          }
 });
 

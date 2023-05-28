@@ -13,6 +13,7 @@ import TestResult from '../Screens/TestResult';
 import TestScreen from '../Screens/TestScreen';
 import AboutUsScreen from '../Screens/AboutUsScreen';
 import OnboardingScreen from '../Screens/OnboardingScreen';
+import ResultHistory from '../Screens/ResultHistory';
 
 
 
@@ -33,6 +34,7 @@ export default function AuthNavigator() {
         <Stack.Screen name="OldTests" component={OldTests} />
         <Stack.Screen name="TestResult" component={TestResult} />
         <Stack.Screen name="TestScreen" component={TestScreen} />
+        <Stack.Screen name="ResultHistory" component={ResultHistory} />
         <Stack.Screen name="AboutUsScreen" component={AboutUsScreen} />
    </Stack.Navigator>
   )

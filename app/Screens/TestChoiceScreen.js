@@ -7,6 +7,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 import TestSelectButton from '../components/TestSelectButton';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
+import axios from 'axios';
+import {setDbLink, getDbLink} from '../config/dblink'
+import {getPatientID, getQueryResult, setQueryResult, setAccX, getAccX, setAccZ, getAccZ, setListArr, getListArr, setOptions, getOptions, getPatientName} from '../config/user'
 
 function HomeScreen() {
   return (
@@ -28,7 +31,43 @@ const Tab = createBottomTabNavigator();
 
 export default function TestChoiceScreen({navigation,route}) {
 
-    
+  async function handleResultHistoryButton(){
+    var query = "SELECT * FROM TESTRESULT WHERE PatientID = '"+ getPatientID() +"'";
+    //console.log(query);
+    axios.defaults.headers.post['Content-Type'] ='application/x-www-form-urlencoded';
+    axios
+    .post(getDbLink(), {query: query, action:"test_result_retrieval"})
+    .then((response) => {
+        //console.log(response);
+        if(response.data.result){
+            queryResult = response.data.queryResult;
+            console.log(queryResult);
+            setQueryResult(response.data.queryResult)
+            var queryResult = getQueryResult();
+            if(queryResult.length > 0){
+              console.log(queryResult);
+
+              setOptions(queryResult);
+  
+              setAccZ(JSON.parse(queryResult[0].AccZ));
+              console.log(getAccZ().length);
+              setAccX(JSON.parse(queryResult[0].AccX));
+              console.log(getAccX().length);
+  
+  
+              setListArr(queryResult, 0);
+  
+              navigation.navigate('ResultHistory');
+            }
+          }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+
+  }
+
+    //console.log(getPatientName())
   return (
     <Screen style={styles.container}>
         <View style = {styles.logo}>
@@ -40,7 +79,7 @@ export default function TestChoiceScreen({navigation,route}) {
             start={{ x: 0, y: 0 }}
             end={{ x: 1.5, y: 1 }}
           >
-          <AppText style= {styles.text}>Welcome </AppText>
+          <AppText style= {styles.text}>Welcome {getPatientName()}</AppText>
           </LinearGradient>
         </View>
 
@@ -50,7 +89,7 @@ export default function TestChoiceScreen({navigation,route}) {
         <ScrollView vertical={true} style={{backgroundColor: 'rgb(250, 250, 250)', width: '100%', flex: 1, flexDirection:'column', borderRadius: 15}}>
         <TestSelectButton title="Balance Test"  style={styles.redirect} onPress={() => navigation.navigate('OnboardingScreen')} imgSource = {require("../assets/balance_button_figure.png")}  />
         <TestSelectButton title="Questionnaire"  style={styles.redirect} onPress={() => navigation.navigate('TestChoiceScreen')} imgSource = {require("../assets/questionnaire_fig.png")}/>
-        <TestSelectButton title="Test 3"  style={styles.redirect} onPress={() => navigation.navigate('TestChoiceScreen')}  />
+        <TestSelectButton title="Result History"  style={styles.redirect} onPress={() => handleResultHistoryButton()}  />
         <TestSelectButton title="Test 4"  style={styles.redirect} onPress={() => navigation.navigate('TestChoiceScreen')}  />
 
         </ScrollView>

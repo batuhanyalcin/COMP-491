@@ -80,10 +80,7 @@ export default function TestResult({navigation, route}) {
   }
 
   async function handleDatabasePress() {
-    const date = new Date();
-    console.log(date);
-    //query = "INSERT INTO TESTRESULT (PathLength, PathLengthCor, PathLengthSag, NormalizedPathLength, Jerk, JerkCor, JerkSag, MeanVel, MeanVelCor, MeanVelSag, AccX, AccZ, PatientID) VALUES ('"+ listData.find(item => item.key === "Normalized Path Length (s^3/m)").value +"','"+ tableContent.tableData[1] +"','"+ tableContent.tableData[2] +"','"+ tableContent.tableData[3] +"','"+ tableContent.tableData[4] +"','"+ tableContent.tableData[5] +"','"+ tableContent.tableData[6] +"','"+ tableContent.tableData[7] +"','"+ tableContent.tableData[8] +"','"+ tableContent.tableData[9] +"','"+JSON.stringify(accX)+"', '"+JSON.stringify(accZ)+"', '1')";
-    const query = `INSERT INTO TESTRESULT 
+  const query = `INSERT INTO TESTRESULT 
   (PathLength, PathLengthCor, PathLengthSag, NormalizedPathLength, Jerk, JerkCor, JerkSag, MeanVel, MeanVelCor, MeanVelSag, AccX, AccZ, PatientID) 
   VALUES 
   ('${listData.find(item => item.key === "Path Length (m/s^2)").value}', 
