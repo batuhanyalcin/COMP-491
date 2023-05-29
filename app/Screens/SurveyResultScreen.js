@@ -37,7 +37,7 @@ const animatedProps = useAnimatedProps(()=> ({
       stroke="#404258"
       strokeWidth={30}
     />
-   <View><Text style= {styles.text}>{resultS} </Text></View>
+   <View style= {styles.container}><Text style= {styles.text}>{resultS} </Text></View>
     <Circle 
       cx={width/2}
       cy={height/2}
@@ -61,21 +61,22 @@ const animatedProps = useAnimatedProps(()=> ({
 
 const styles = StyleSheet.create({
 container: {
-        flex: 1,
-        backgroundColor: colors.white,
+        
+       //verticalAlign: 'middle',
         alignItems: 'center',
         justifyContent:'center',
-        padding:10,
+        marginTop: 350,
        
-        borderColor:colors.grey
+  
+       
     },
 text:{
-    
-    
    
+    alignSelf: 'center',
+    textAlignVertical: 'center',
     fontSize: 100,
-    marginTop: 350,
-    marginLeft: 100
+    //marginTop: 350,
+    //marginLeft: 100
     
 }
   });
