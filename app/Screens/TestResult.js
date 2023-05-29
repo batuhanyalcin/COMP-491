@@ -31,6 +31,7 @@ export default function TestResult({navigation, route}) {
   console.log("length of accX is " + accX.length)
 
   const listData = [
+    {key: "Sway Area", value: pc.get95ellipse(accX, accZ)[2].toFixed(2)},
     {key: "Path Length (m/s^2)", value: pc.calculatePathLength(accX, accZ, dts).pl?.toFixed(2)},
     {key: "Path Length (Coronal) (m/s^2)", value: pc.calculatePathLength(accX, accZ, dts).plx?.toFixed(2)},
     {key: "Path Length (Sagittal) (m/s^2)", value: pc.calculatePathLength(accX, accZ, dts).plz?.toFixed(2)},
@@ -88,9 +89,10 @@ export default function TestResult({navigation, route}) {
 
   async function handleDatabasePress() {
   const query = `INSERT INTO TESTRESULT 
-  (PathLength, PathLengthCor, PathLengthSag, NormalizedPathLength, Jerk, JerkCor, JerkSag, MeanVel, MeanVelCor, MeanVelSag, AccX, AccZ, PatientID) 
+  (SwayArea, PathLength, PathLengthCor, PathLengthSag, NormalizedPathLength, Jerk, JerkCor, JerkSag, MeanVel, MeanVelCor, MeanVelSag, AccX, AccZ, PatientID) 
   VALUES 
-  ('${listData.find(item => item.key === "Path Length (m/s^2)").value}', 
+  ('${listData.find(item => item.key === "Sway Area").value}',
+  '${listData.find(item => item.key === "Path Length (m/s^2)").value}', 
   '${listData.find(item => item.key === "Path Length (Coronal) (m/s^2)").value}', 
   '${listData.find(item => item.key === "Path Length (Sagittal) (m/s^2)").value}', 
   '${listData.find(item => item.key === "Normalized Path Length (s^3/m)").value}', 

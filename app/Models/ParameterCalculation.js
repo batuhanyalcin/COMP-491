@@ -1,3 +1,4 @@
+import { Matrix, EigenvalueDecomposition } from 'ml-matrix';
 export function calculateDerivative(y, dxs) {
     var dydx = Array(y.length)
 
@@ -196,4 +197,65 @@ export function movingAverageFilter(x, w) {
     }
     console.log("444")
     return y
+  }
+
+  export function get95ellipse(x, y){
+
+    var centerX = x.reduce((a, b) => a + b, 0)/ x.length;
+    var centerY = y.reduce((a, b) => a + b, 0)/ y.length;
+
+    var centeredX = x.map(num => num - centerX); 
+    var centeredY = y.map(num => num - centerY); 
+
+    var Cxx = centeredX.reduce((a, num) => a + (num ** 2), 0);
+    var Cyy = centeredY.reduce((a, num) => a + (num ** 2), 0);
+    var Cxy = 0;
+    for(var i=0; i < centeredX.length; i++){
+        Cxy += centeredX[i] * centeredY[i];
+    }
+
+    var cov_mat = [[Cxx, Cxy], [Cxy, Cyy]];
+    console.log(cov_mat);
+
+    var A = new Matrix(cov_mat);
+    var e = new EigenvalueDecomposition(A);
+    var real = e.realEigenvalues;
+    var vectors = e.eigenvectorMatrix.to2DArray();
+
+    var bigIndex = -1;
+    var smallIndex = -1;
+
+    if(real[0] > real[1]){
+        bigIndex = 0;
+        smallIndex = 1;
+    } else {
+        bigIndex = 1;
+        smallIndex = 0;
+    }
+
+    var sig0 = Math.sqrt(real[bigIndex] / (centeredX.length - 1));
+    var sig1 = Math.sqrt(real[smallIndex] / (centeredX.length - 1));
+
+    var mainHalfAxis = [Math.sqrt(5.991) * sig0 * vectors[bigIndex][0], Math.sqrt(5.991) * sig0 * vectors[bigIndex][1]];
+    var minorHalfAxis = [Math.sqrt(5.991) * sig1 * vectors[smallIndex][0], Math.sqrt(5.991) * sig1 * vectors[smallIndex][1]];
+    
+    var r1 = Math.sqrt(mainHalfAxis[0] ** 2 + mainHalfAxis[1] ** 2);
+    var r2 = Math.sqrt(minorHalfAxis[0] ** 2 + minorHalfAxis[1] ** 2);
+
+    var area = 5.991 * Math.PI * sig0 * sig1;
+    console.log(area);
+
+    var rotationAngle = Math.atan2(mainHalfAxis[1], mainHalfAxis[0]);
+
+    const elx = [];
+    const ely = [];
+    counter = 0;
+    for (var i = 0; i < 360; i += 0.1){
+      var angle = i/180*Math.PI;
+      elx[counter] = centerX + Math.cos(rotationAngle) * r1 * Math.cos(angle) - Math.sin(rotationAngle) * r2 * Math.sin(angle);
+      ely[counter] = centerY + Math.sin(rotationAngle) * r1 * Math.cos(angle) + Math.cos(rotationAngle) * r2 * Math.sin(angle);
+      counter++;
+    }
+    //console.log(elx);
+    return [elx, ely, area];
   }

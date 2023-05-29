@@ -1,4 +1,4 @@
-let dbLink = "https://e28c-88-255-99-19.eu.ngrok.io";
+let dbLink = "https://6976-88-255-99-19.eu.ngrok.io";
 
 export function setDbLink(newLink) {
     dbLink = newLink;

@@ -5,6 +5,8 @@ const cors = require('cors');
 const app=express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 var mysql = require('mysql');
 // create a connection variable with the required details
 var con = mysql.createConnection({

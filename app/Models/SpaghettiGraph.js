@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Button } from 'react-native';
 import Plotly from 'react-native-plotly';
-
+import { get95ellipse } from './ParameterCalculation';
 
 
 
@@ -35,7 +35,8 @@ export default function SpaghettiGraph(props)  {
         }
     };
 
-    var [elx, ely] = getEllipsePoints(data.x, data.y);
+    //var [elx, ely] = getEllipsePoints(data.x, data.y);
+    var [elx, ely, area] = get95ellipse(data.x, data.y);
 
     var new_data = [{x: data.x, y: data.y, mode: "lines"}, {x: elx, y: ely, mode: "lines"}];
 

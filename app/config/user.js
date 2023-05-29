@@ -50,6 +50,7 @@ export function getAccZ() {
 
 export function setListArr(queryResult, index){
     const listData = [
+        {key: "Sway Area", value: queryResult[index].SwayArea},
         {key: "Path Length (m/s^2)", value: queryResult[index].PathLength},
         {key: "Path Length (Coronal) (m/s^2)", value: queryResult[index].PathLengthCor},
         {key: "Path Length (Sagittal) (m/s^2)", value: queryResult[index].PathLengthSag},
