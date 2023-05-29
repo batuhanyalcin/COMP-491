@@ -3,10 +3,12 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const app=express();
-app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(bodyParser.json({limit: '500mb'}));
+app.use(bodyParser.urlencoded({limit: '500mb', extended: true}));
+
 app.use(cors());
-app.use(bodyParser.json({limit: '50mb'}));
-app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+
 var mysql = require('mysql');
 // create a connection variable with the required details
 var con = mysql.createConnection({
@@ -25,7 +27,6 @@ console.log('connection successful');
 
 app.get('/', (req,res) =>{
     res.json ('OK');
-    //con.query("INSERT into PATIENT (PatientId, Pname, Email, PhoneNumber, Gender, Age, Weight, Height) VALUES ('20', 'EraySozer', 'eraysozer20@gmail.com', '05310845533', 'T', '23', '85', '190');");
 })
 
 app.post('/', (req,res)=>{
