@@ -89,9 +89,12 @@ export default function TestChoiceScreen({navigation,route}) {
         </View>
         <ScrollView vertical={true} style={{backgroundColor: 'rgb(250, 250, 250)', width: '100%', flex: 1, flexDirection:'column', borderRadius: 15}}>
         <TestSelectButton title="Balance Test"  style={styles.redirect} onPress={() => navigation.navigate('OnboardingScreen')} imgSource = {require("../assets/balance_button_figure.png")}  />
-        <TestSelectButton title="Questionnaire"  style={styles.redirect} onPress={() => navigation.navigate('TestChoiceScreen')} imgSource = {require("../assets/questionnaire_fig.png")}/>
+
+        <TestSelectButton title="Questionnaire"  style={styles.redirect} onPress={() => navigation.navigate('SurveyInfoScreen')} imgSource = {require("../assets/questionnaire_fig.png")}/>
+       
         <TestSelectButton title="Result History"  style={styles.redirect} onPress={() => handleResultHistoryButton()}  />
-        <TestSelectButton title="Test 4"  style={styles.redirect} onPress={() => navigation.navigate('TestChoiceScreen')}  />
+
+        <TestSelectButton title="Potential Test"  style={styles.redirect} onPress={() => navigation.navigate('TestChoiceScreen')}  />
 
         </ScrollView>
      
