@@ -13,6 +13,9 @@ import TestResult from '../Screens/TestResult';
 import TestScreen from '../Screens/TestScreen';
 import AboutUsScreen from '../Screens/AboutUsScreen';
 import OnboardingScreen from '../Screens/OnboardingScreen';
+import SurveyScreen from '../Screens/SurveyScreen';
+import SurveyInfoScreen from '../Screens/SurveyInfoScreen';
+import SurveyResultScreen from '../Screens/SurveyResultScreen'
 
 
 
@@ -34,6 +37,9 @@ export default function AuthNavigator() {
         <Stack.Screen name="TestResult" component={TestResult} />
         <Stack.Screen name="TestScreen" component={TestScreen} />
         <Stack.Screen name="AboutUsScreen" component={AboutUsScreen} />
+        <Stack.Screen name="SurveyScreen" component={SurveyScreen} />
+        <Stack.Screen name="SurveyInfoScreen" component={SurveyInfoScreen} />
+        <Stack.Screen name="SurveyResultScreen" component={SurveyResultScreen} />
    </Stack.Navigator>
   )
 }
