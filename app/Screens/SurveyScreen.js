@@ -200,12 +200,28 @@ export default class SurveyScreen extends Component {
           
         console.log(answersAsObj);
         var result = 0;
+        var emotion = 0;
+        var func = 0;
+        var phys = 0;
         for (var key in answersAsObj){
             console.log( key, answersAsObj[key] );
             result = result + answersAsObj[key]['value'];
+            if(key === 'q1' || key === 'q4' || key === 'q8' || key === 'q11' || key === 'q13' || key === 'q17' || key === 'q25'){
+                phys = phys + answersAsObj[key]['value'];
+            }
+            if(key === 'q3' || key === 'q5' || key === 'q6' || key === 'q7' || key === 'q12' || key === 'q14' || key === 'q16'|| key === 'q19'|| key === 'q24'){
+                func = func + answersAsObj[key]['value'];
+            }
+            if(key === 'q2' || key === 'q9' || key === 'q10' || key === 'q15' || key === 'q18' || key === 'q20' || key === 'q21'|| key === 'q22'|| key === 'q23'){
+                emotion = emotion + answersAsObj[key]['value'];
+            }
         }
+        
         console.log(result);
-        this.props.navigation.navigate('SurveyResultScreen', { result: result });
+        console.log(emotion);
+        console.log(phys);
+        console.log(func);
+        this.props.navigation.navigate('SurveyResultScreen', { result: result , emotion: emotion, phys: phys, func: func});
     }
 
     /**
@@ -286,7 +302,7 @@ export default class SurveyScreen extends Component {
                 
                 <View style = {styles.question}>
                 <LinearGradient
-                    colors={['#919bff', '#133a94']}
+                    colors={['rgb(145, 154, 255)', '#133a94']}
                     style={[styles.centered, {borderRadius:10}]}
                     useAngle={true}
                     angle={60}
@@ -382,7 +398,7 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         fontWeight: 800,
         textAlign: 'justify',
-        color: '#919bf'
+        color: 'rgb(145, 154, 255)'
         
     },
     text:{
