@@ -37,7 +37,7 @@ const animatedProps = useAnimatedProps(()=> ({
       stroke="#404258"
       strokeWidth={30}
     />
-   <AppText style= {styles.text}>{resultS} </AppText>
+   <View><Text style= {styles.text}>{resultS} </Text></View>
     <Circle 
       cx={width/2}
       cy={height/2}
