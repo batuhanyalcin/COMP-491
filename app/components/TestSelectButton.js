@@ -10,7 +10,7 @@ export default function TestSelectButton({title,onPress,imgSource}) {
    onPress={onPress}
    >
      <LinearGradient
-        colors={['#41E4E4', '#64a0be']}
+        colors={['#84DDF1', '#64a0bb']}
         useAngle={true}
         angle={160}
         angleCenter={{ x: 1, y: 1 }}

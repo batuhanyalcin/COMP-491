@@ -1,9 +1,9 @@
 import React from 'react';
-import { SafeAreaView, Image, StyleSheet, FlatList, View, Text, StatusBar, TouchableOpacity, Dimensions} from 'react-native';
+import { SafeAreaView, Image, StyleSheet, FlatList, View, Text, StatusBar, TouchableOpacity, Dimensions, ImageBackground} from 'react-native';
 
 const {width, height} = Dimensions.get('window');
 
-const COLORS = {primary: '#282534', white: '#fff'};
+const COLORS = {primary: '#16182C', white: '#fff'};
 
 const slides = [
   {
@@ -27,7 +27,7 @@ const Slide = ({item}) => {
     <View style={{alignItems: 'center'}}>
       <Image
         source={item?.image}
-        style={{height: '75%', width, resizeMode: 'contain'}}
+        style={{height: '50%', width, marginTop: height*0.1, marginBottom: height*0.05,resizeMode: 'contain'}}
       />
       <View>
         <Text style={styles.title}>{item?.title}</Text>
@@ -113,9 +113,9 @@ const SurveyInfoScreen = ({navigation}) => {
                 style={[
                   styles.btn,
                   {
-                    borderColor: COLORS.white,
+                    borderColor: COLORS.primary,
                     borderWidth: 1,
-                    backgroundColor: 'transparent',
+                    backgroundColor: COLORS.primary,
                   },
                 ]}
                 onPress={skip}>
@@ -132,11 +132,20 @@ const SurveyInfoScreen = ({navigation}) => {
               <TouchableOpacity
                 activeOpacity={0.8}
                 onPress={goToNextSlide}
-                style={styles.btn}>
+                style={[
+                  styles.btn,
+                  {
+                    borderColor: COLORS.primary,
+                    borderWidth: 1,
+                    backgroundColor: COLORS.primary,
+                  },
+                ]}>
                 <Text
                   style={{
                     fontWeight: 'bold',
                     fontSize: 15,
+                    color: COLORS.white,
+
                   }}>
                   NEXT
                 </Text>
@@ -150,6 +159,7 @@ const SurveyInfoScreen = ({navigation}) => {
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: COLORS.primary}}>
+      <ImageBackground source={require("../assets/Background.png")}>
       <StatusBar backgroundColor={COLORS.primary} />
       <FlatList
         ref={ref}
@@ -162,13 +172,14 @@ const SurveyInfoScreen = ({navigation}) => {
         renderItem={({item}) => <Slide item={item} />}
       />
       <Footer />
+      </ImageBackground>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   info: {
-    color: COLORS.white,
+    color: COLORS.primary,
    
     fontSize: 13,
     textAlign: 'justify',
@@ -176,7 +187,7 @@ const styles = StyleSheet.create({
     
   },
   subtitle: {
-    color: COLORS.white,
+    color: COLORS.primary,
    
     fontSize: 13,
     marginTop: 10,
@@ -186,7 +197,7 @@ const styles = StyleSheet.create({
     lineHeight: 23,
   },
   title: {
-    color: COLORS.white,
+    color: COLORS.primary,
     fontSize: 22,
     fontWeight: 'bold',
     marginTop: 20,
