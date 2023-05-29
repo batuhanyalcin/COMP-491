@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Button } from 'react-native';
 import Plotly from 'react-native-plotly';
-
+import { get95ellipse } from './ParameterCalculation';
 
 
 
@@ -11,8 +11,8 @@ export default function SpaghettiGraph(props)  {
     //const med_filtered_y = movingAverageFilter(props.y, 7);
 
     //Moving Average Filter
-    const movingAverageX = movingAverageFilter(props.x, 7);
-    const movingAverageY = movingAverageFilter(props.y, 7);
+    //const movingAverageX = movingAverageFilter(props.x, 7);
+    //const movingAverageY = movingAverageFilter(props.y, 7);
     
     //Low-pass + moving avarage filter
     //const com_filtered_x = combine_L_MovAvg_Filter(props.x,100);
@@ -24,15 +24,21 @@ export default function SpaghettiGraph(props)  {
     //const [x, setX] = React.useState([1, 2, -3, 4, 5])
     //const [y, setY] = React.useState([1, 2, 3, 4, -8])
     
+    
     const data = {
         __id: 'up',
-        x: movingAverageX,
-        y: movingAverageY,
+        x: props.x,
+        y: props.y,
         type: 'scatter',
         marker: {
           color: 'rgb(54, 73, 153)',
         }
-      };
+    };
+
+    //var [elx, ely] = getEllipsePoints(data.x, data.y);
+    var [elx, ely, area] = get95ellipse(data.x, data.y);
+
+    var new_data = [{x: data.x, y: data.y, mode: "lines"}, {x: elx, y: ely, mode: "lines"}];
 
     state = {
         data: [data],
@@ -56,7 +62,7 @@ export default function SpaghettiGraph(props)  {
       <View style={styles.container}>
         <View style={styles.chartRow}>
           <Plotly
-            data={state.data}
+            data={new_data}
             layout={state.layout}
             config={{'displayModeBar': false}}
             style={{backgroundColor: 'rgba(0,0,0,0)'}}
@@ -89,6 +95,35 @@ const styles = StyleSheet.create({
   }
 });
 
+
+function getEllipsePoints(x, y){
+  var cov = require( 'compute-covariance' );
+
+  var centerX = x.reduce((a, b) => a + b, 0)/ x.length;
+  var centerY = y.reduce((a, b) => a + b, 0)/ y.length;
+
+  var cov_mat = cov( [x, y] );
+  var a = cov_mat[0][0]; 
+  var b = cov_mat[0][1];
+  var c = cov_mat[1][1];
+
+  var r1 = (a + c)/ 2 + Math.sqrt(Math.pow(((a - c) / 2), 2) + Math.pow(b, 2));
+  var r2 = (a + c)/ 2 - Math.sqrt(Math.pow(((a - c) / 2), 2) + Math.pow(b, 2));
+  var theta = Math.atan2(r1-a, b);
+  var counter = 0;
+  
+  const elx = [];
+  const ely = [];
+  counter = 0;
+  for (var i = 0; i < 360; i += 0.1){
+    var angle = i/180*Math.PI;
+    elx[counter] = centerX + Math.cos(theta) * r1 * Math.cos(angle) - Math.sin(theta) * r2 * Math.sin(angle);
+    ely[counter] = centerY + Math.sin(theta) * r1 * Math.cos(angle) + Math.cos(theta) * r2 * Math.sin(angle);
+    counter++;
+  }
+
+  return [elx, ely];
+}
 
 function medianFilter(x, w) {
   const y = [];

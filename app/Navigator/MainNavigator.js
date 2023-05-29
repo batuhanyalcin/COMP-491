@@ -13,6 +13,10 @@ import OnboardingScreen from '../Screens/OnboardingScreen';
 import SurveyScreen from '../Screens/SurveyScreen';
 import SurveyInfoScreen from '../Screens/SurveyInfoScreen';
 import SurveyResultScreen from '../Screens/SurveyResultScreen'
+import ResultHistory from '../Screens/ResultHistory';
+
+
+
 const Stack = createStackNavigator();
 
 
@@ -27,6 +31,7 @@ export default function MainNavigator() {
         <Stack.Screen name="BalanceTestScreen" component={BalanceTestScreen} />
         <Stack.Screen name="TestResult" component={TestResult} />
         <Stack.Screen name="TestScreen" component={TestScreen} />
+        <Stack.Screen name="ResultHistory" component={ResultHistory} />
         <Stack.Screen name="AboutUsScreen" component={AboutUsScreen} />
         <Stack.Screen name="SurveyScreen" component={SurveyScreen} />
         <Stack.Screen name="SurveyInfoScreen" component={SurveyInfoScreen} />
