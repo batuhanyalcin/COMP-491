@@ -6,6 +6,9 @@ import AppText from '../components/AppText';
 import {Circle, Svg} from 'react-native-svg'
 import Animated, {useAnimatedProps, useSharedValue, withTiming} from 'react-native-reanimated'
 import { useEffect } from 'react/cjs/react.production.min';
+import axios from 'axios';
+import {setDbLink, getDbLink} from '../config/dblink'
+import {getPatientID} from '../config/user'
 export default function SurveyResultScreen({navigation, route}) {
     const overallScore = (100 - route.params.result.toString()) * 0.01;
     const emotionalScore = 1 - (route.params.emotion.toString()/36);
@@ -17,8 +20,8 @@ export default function SurveyResultScreen({navigation, route}) {
     const RADIUS = CIRCLE_LENGTH / (2*Math.PI);
     const resultS = overallScore + "%";
     async function handleDatabasePress() {
-      const query = "INSERT into SurveyResult (FunctionalScore, PhysicalScore, EmotionalScore, OverallScore, PatientID) VALUES ('10', '10', '10', '10', '1');"
-        
+      const query = "INSERT into SurveyResult (FunctionalScore, PhysicalScore, EmotionalScore, OverallScore, PatientID) VALUES ('"+functionalScore+"', '"+physicalScore+"', '"+emotionalScore+"', '"+overallScore+"', '"+getPatientID()+"');"
+      
       axios.defaults.headers.post['Content-Type'] ='application/x-www-form-urlencoded';
         axios
           .post(getDbLink(), {query: query, action:"survey_result_entry"})
@@ -30,40 +33,21 @@ export default function SurveyResultScreen({navigation, route}) {
           });
       }
 
+      
+  
       const [fileUri, setFileUri] = React.useState(null);
   return (
     
     <Screen>
    
      
-  <Svg>
-    <Circle 
-      cx={width/2}
-      cy={height/2}
-      r={RADIUS}
-      fill="transparent"
-      stroke="#404258"
-      strokeWidth={30}
-    />
-   <View style= {styles.container}><Text style= {styles.text}>{resultS} </Text></View>
-    <Circle 
-      cx={width/2}
-      cy={height/2}
-      r={RADIUS}
-      stroke="rgb(145, 154, 255)"
-      strokeWidth={15}
-      strokeDasharray={CIRCLE_LENGTH}
-      strokeDashoffset={CIRCLE_LENGTH * overallScore}
-    />
-
-    
-  </Svg>
-  <TouchableOpacity style={styles.buttonStyle} onPress={handleDatabasePress} disabled={!fileUri}> 
+ 
+  <View style={{height: 90, flexDirection: 'row', paddingLeft: 15, paddingRight: 15, marginBottom: 15}}>
+          <TouchableOpacity style={styles.buttonStyle} onPress={handleDatabasePress}> 
               <Text style={styles.buttonTextStyle}>Save Results</Text>
               <Image source={require('../assets/diskette.png')} style={{width: 30, height: 30, marginLeft: 'auto', marginRight: 'auto', marginBottom: 'auto'}}/>
-  </TouchableOpacity>
-  
-
+          </TouchableOpacity>
+        </View>
 
     </Screen>
     

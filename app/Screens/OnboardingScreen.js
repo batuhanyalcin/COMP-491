@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, Image, StyleSheet, FlatList, View, Text, StatusBar, TouchableOpacity, Dimensions, ImageBackground} from 'react-native';
+import { SafeAreaView, Image, StyleSheet, FlatList, View, Text, StatusBar, TouchableOpacity, Dimensions, ImageBackground, ScrollView} from 'react-native';
 
 const {width, height} = Dimensions.get('window');
 
@@ -162,20 +162,22 @@ const OnboardingScreen = ({navigation}) => {
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: COLORS.primary}}>
-      <ImageBackground source={require("../assets/Background.png")}>
-      <StatusBar backgroundColor={COLORS.primary} />
-      <FlatList
-        ref={ref}
-        onMomentumScrollEnd={updateCurrentSlideIndex}
-        contentContainerStyle={{height: height * 0.75}}
-        showsHorizontalScrollIndicator={false}
-        horizontal
-        data={slides}
-        pagingEnabled
-        renderItem={({item}) => <Slide item={item} />}
-      />
-      <Footer />
-      </ImageBackground>
+      <ScrollView overScrollMode='never' vertical={true} style={{backgroundColor: 'rgb(250, 250, 250)', width: '100%', flex: 1, flexDirection:'column', borderRadius: 15}}>
+        <ImageBackground source={require("../assets/Background.png")}>
+        <StatusBar backgroundColor={COLORS.primary} />
+        <FlatList
+          ref={ref}
+          onMomentumScrollEnd={updateCurrentSlideIndex}
+          contentContainerStyle={{height: height * 0.75}}
+          showsHorizontalScrollIndicator={false}
+          horizontal
+          data={slides}
+          pagingEnabled
+          renderItem={({item}) => <Slide item={item} />}
+        />
+        <Footer />
+        </ImageBackground>
+      </ScrollView>
     </SafeAreaView>
   );
 };
