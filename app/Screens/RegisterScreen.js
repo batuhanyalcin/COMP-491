@@ -75,7 +75,7 @@ export default function RegisterScreen({navigation}) {
       // Make HTTP POST request to PHP script
       console.log(name);
       console.log(email);
-      query = "INSERT into PATIENT (PName, Email, PhoneNumber, Gender, Age, Weight, Height, PPassword) VALUES ('" + name + "', '"+email+"', '"+Phone_no+"', '"+gender+"', '"+age+"', '"+weight+"', '"+height+"', '"+password+"');"
+      query = "INSERT into hospital_patient (PName, Email, PhoneNumber, Gender, Age, Weight, Height, PPassword) VALUES ('" + name + "', '"+email+"', '"+Phone_no+"', '"+gender+"', '"+age+"', '"+weight+"', '"+height+"', '"+password+"');"
       console.log(query);
       axios.defaults.headers.post['Content-Type'] ='application/x-www-form-urlencoded';
       axios
