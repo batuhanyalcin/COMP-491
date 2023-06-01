@@ -61,6 +61,7 @@ export default function ResultHistory({navigation, route}) {
     return (
       <SafeAreaView style={styles.container} >
         <ScrollView overScrollMode='never' vertical={true} style={{backgroundColor: 'rgb(250, 250, 250)', width: '100%', flex: 1, flexDirection:'column', borderRadius: 15}}>
+          <View><Text style = {styles.text2}>Survey Result History</Text></View>
           <SelectDropdown
               data={getSurveyOptions()}
               defaultValueByIndex = {0}
@@ -79,28 +80,28 @@ export default function ResultHistory({navigation, route}) {
                   return item
               }}
           />
-          <View>
+        <View style = {styles.container}>
             <ProgressChart
-              data={surveyResult.data}
-              width={Dimensions.get("window").width - 10}
-              height={220}
-              strokeWidth={16}
-              hasLegend={true}
-              withCustomBarColorFromData={true}
-              radius={35}
-              chartConfig={{
+                data={surveyResult.data}
+                width={Dimensions.get("window").width - 10}
+                height={220}
+                strokeWidth={16}
+                hasLegend={true}
+                withCustomBarColorFromData={true}
+                radius={35}
+                chartConfig={{
                 backgroundGradientFromOpacity: 0.5,
                 backgroundGradientToOpacity: 1,
                 backgroundColor: colors.white,
                 backgroundGradientFrom: colors.white,
                 backgroundGradientTo: colors.white,
-                propsForLabels: { fill: colors.black, fontSize: 9},
+                propsForLabels: { fill: colors.black, fontSize: 9, fontWeight: 500},
                 decimalPlaces: 2,
                 color: (opacity = 1, _index) => `rgba(128,128,128,${opacity})`,
-              }}
-              style={{ marginVertical: 8, borderRadius: 10 }}
+                }}
+                style={{ marginVertical: 8, borderRadius: 10 }}
             />
-          </View>
+    </View>
         </ScrollView>
         
       </SafeAreaView>
@@ -132,7 +133,27 @@ const styles = StyleSheet.create({
     borderRadius: 15,
 
     
-  },
+  },container2: {
+        
+    marginTop: Dimensions.get('window').height/5,
+    alignItems: 'center',
+    justifyContent:'center',
+    
+   
+
+   
+},
+text2:{
+   
+    alignSelf: 'center',
+    textAlignVertical: 'center',
+    fontSize: 20,
+    fontWeight: 800
+    //marginTop: 350,
+    //marginLeft: 100
+    
+},
+  
   listContainer: {
     height: 65,
     backgroundColor: 'white', 
