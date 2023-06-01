@@ -38,7 +38,7 @@ export default function SpaghettiGraph(props)  {
     //var [elx, ely] = getEllipsePoints(data.x, data.y);
     var [elx, ely, area] = get95ellipse(data.x, data.y);
 
-    var new_data = [{x: data.x, y: data.y, mode: "lines"}, {x: elx, y: ely, mode: "lines"}];
+    var new_data = [{x: data.x, y: data.y, mode: "lines", name: 'Acceleration'}, {x: elx, y: ely, mode: "lines", name: '95 Ellipse'}];
 
     state = {
         data: [data],
