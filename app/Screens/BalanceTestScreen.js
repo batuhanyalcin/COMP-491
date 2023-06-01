@@ -4,7 +4,7 @@ import * as Speech from 'expo-speech'
 import { DeviceMotion } from 'expo-sensors';
 import { CountdownCircleTimer, useCountdown } from 'react-native-countdown-circle-timer';
 import Svg, { Path, LinearGradient, Stop, Defs } from 'react-native-svg';
-import Button from '../components/Button';
+import TestStartButton from '../components/TestStartButton';
 
 //import Button from '../components/Button'
 let accX = [];
@@ -132,7 +132,7 @@ export default function BalanceTestScreen({navigation,route}) {
 
   const TestState = {
     TestNotStarted: {buttonText: "Start Test", buttonColor: ['#090979', '#00d4ff'], buttonFunction: startTest},
-    TestOngoing: {buttonText: "Pause Test", buttonColor: ['#C10B2B', '#890FBD'], buttonFunction: pauseTest },
+    TestOngoing: {buttonText: "Pause Test", buttonColor: ['#833ab4', '#458cfc'], buttonFunction: pauseTest },
     TestPaused: {buttonText: "See Results", buttonColor: ['#187a43', '#0e98ad'], buttonFunction: onTestEnded },
   }
   
@@ -144,11 +144,11 @@ export default function BalanceTestScreen({navigation,route}) {
     <View style={styles.container}>
       <View style={{ width: size, height: size, position: 'relative' }}>
         <CountdownCircleTimer
-        strokeWidth={7}
+        strokeWidth={10}
         isPlaying={isPlaying}
         duration={totalTime}
-        colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
-        colorsTime={[10, 6, 3, 0]}
+        colors={["#090979", "#36669c", "#41a0ae", "#3ec995", "#74C365"]}
+        colorsTime={[20, 15, 10, 5, 0]}
         onComplete={onTestEnded}
         elapsedTime={elapsedTime}
         >
@@ -170,7 +170,7 @@ export default function BalanceTestScreen({navigation,route}) {
         </CountdownCircleTimer>
       </View>
       
-      <Button title={testState.buttonText} style={styles.button} onPress={testState.buttonFunction} disabled={buttonDisabled} colors={buttonDisabled ? ['#000000', '#ffffff'] : testState.buttonColor} />
+      <TestStartButton title={testState.buttonText} onPress={testState.buttonFunction} disabled={buttonDisabled} colors={buttonDisabled ? ['#808080', '#c5c5c5'] : testState.buttonColor} />
     </View>
   );
 }
@@ -210,9 +210,5 @@ const styles = StyleSheet.create({
     top: 0,
     width: '100%',
     height: '100%'
-  },
-  button: {
-    borderRadius: 20
-
   }
 });
