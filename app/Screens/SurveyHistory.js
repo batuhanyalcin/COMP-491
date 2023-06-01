@@ -1,16 +1,10 @@
-import { SafeAreaView, StyleSheet, Text, View, ScrollView, Button, FlatList} from 'react-native'
+import { SafeAreaView, StyleSheet, Text, View, ScrollView, Button, Dimensions, Image, FlatList, TouchableOpacity} from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { Table, TableWrapper, Row, Rows, Col } from 'react-native-table-component'
-import SpaghettiGraph from '../Models/SpaghettiGraph'
-import * as pc from '../Models/ParameterCalculation'
-import ListItem from '../components/ListItem'
-import * as DocumentPicker from 'expo-document-picker';
-import * as FileSystem from 'expo-file-system';
-import * as Sharing from 'expo-sharing';
-import axios from 'axios';
-import {setDbLink, getDbLink} from '../config/dblink'
 import {getOptions, getEmotionalScore, getFunctionalScore, getOverallScore, getPhysicalScore, getSurveyQueryResult, setEmotionalScore, setFunctionalScore, setOverallScore, setPhysicalScore, getSurveyOptions} from '../config/user'
 import SelectDropdown from 'react-native-select-dropdown'
+import {ProgressChart} from "react-native-chart-kit";
+import colors from '../config/colors';
+
 
 
 export default function ResultHistory({navigation, route}) {
@@ -21,7 +15,16 @@ export default function ResultHistory({navigation, route}) {
       overall: getOverallScore(),
       physical: getPhysicalScore(),
       functional : getFunctionalScore(),
-      emotional: getEmotionalScore()
+      emotional: getEmotionalScore(),
+      data: {
+        labels: ["Overall:", "Emotional:", "Functional:", "Physical:"], // optional
+        data: [getOverallScore(), getEmotionalScore(), getFunctionalScore(), getPhysicalScore()],
+        colors: [
+          "rgba(255, 0, 0,0.5)",
+          "rgba(238, 130, 238,0.6)",
+          "rgba(106, 90, 205,0.5)",
+          "rgba(60, 179, 113,0.2)",]
+      }
     })
 
     useEffect(() => {
@@ -29,20 +32,30 @@ export default function ResultHistory({navigation, route}) {
     }, [surveyResult]); 
 
     function handleOptionChange(e) {
-      var surveyQueryResult = getSurveyQueryResult()
+      var surveyQueryResult = getSurveyQueryResult();
 
       setOverallScore(surveyQueryResult[e].OverallScore);
       setFunctionalScore(surveyQueryResult[e].FunctionalScore);
       setPhysicalScore(surveyQueryResult[e].PhysicalScore);
-      setEmotionalScore(surveyQueryResult[e].EmotionalScore)
+      setEmotionalScore(surveyQueryResult[e].EmotionalScore);
       setSurveyResult({
         ...surveyResult,
         
         overall: getOverallScore(),
         physical: getPhysicalScore(),
         functional : getFunctionalScore(),
-        emotional: getEmotionalScore()
+        emotional: getEmotionalScore(),
+        data: {
+          labels: ["Overall:", "Emotional:", "Functional:", "Physical:"], // optional
+          data: [getOverallScore(), getEmotionalScore(), getFunctionalScore(), getPhysicalScore()],
+          colors: [
+            "rgba(255, 0, 0,0.5)",
+            "rgba(238, 130, 238,0.6)",
+            "rgba(106, 90, 205,0.5)",
+            "rgba(60, 179, 113,0.2)",]
+        }
       });
+      
     }
 
     return (
@@ -66,11 +79,34 @@ export default function ResultHistory({navigation, route}) {
                   return item
               }}
           />
+          <View>
+            <ProgressChart
+              data={surveyResult.data}
+              width={Dimensions.get("window").width - 10}
+              height={220}
+              strokeWidth={16}
+              hasLegend={true}
+              withCustomBarColorFromData={true}
+              radius={35}
+              chartConfig={{
+                backgroundGradientFromOpacity: 0.5,
+                backgroundGradientToOpacity: 1,
+                backgroundColor: colors.white,
+                backgroundGradientFrom: colors.white,
+                backgroundGradientTo: colors.white,
+                propsForLabels: { fill: colors.black, fontSize: 9},
+                decimalPlaces: 2,
+                color: (opacity = 1, _index) => `rgba(128,128,128,${opacity})`,
+              }}
+              style={{ marginVertical: 8, borderRadius: 10 }}
+            />
+          </View>
         </ScrollView>
         
       </SafeAreaView>
     );
   } else {
+   print('aa');
     return (
       <SafeAreaView style={styles.container} >
         <ScrollView overScrollMode='never' vertical={true} style={{backgroundColor: 'rgb(250, 250, 250)', width: '100%', flex: 1, flexDirection:'column', borderRadius: 15}}>
