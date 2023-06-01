@@ -9,7 +9,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import axios from 'axios';
 import {setDbLink, getDbLink} from '../config/dblink'
-import {getPatientID, getQueryResult, setQueryResult, setAccX, getAccX, setAccZ, getAccZ, setListArr, getListArr, setOptions, getOptions, getPatientName} from '../config/user'
+import {getPatientID, getQueryResult, setQueryResult, setAccX, getAccX, setAccZ, getAccZ, setListArr, getListArr, setOptions, getOptions, getPatientName, setSurveyQueryResult, getSurveyQueryResult, setEmotionalScore, setFunctionalScore, setOverallScore, setPhysicalScore, setSurveyOptions} from '../config/user'
 
 function HomeScreen() {
   return (
@@ -30,6 +30,34 @@ function SettingsScreen() {
 const Tab = createBottomTabNavigator();
 
 export default function TestChoiceScreen({navigation,route}) {
+
+  async function handleSurveyHistoryButton(){
+    var query = "Select * from SurveyResult where PatientID = '"+getPatientID()+"';";
+    axios.defaults.headers.post['Content-Type'] ='application/x-www-form-urlencoded';
+    axios
+    .post(getDbLink(), {query: query, action:"survey_result_retrieval"})
+    .then((response) => {
+        //console.log(response);
+        if(response.data.result){
+            var surveyQueryResult = response.data.queryResult;
+            console.log(surveyQueryResult);
+            setSurveyQueryResult(response.data.queryResult)
+        
+            if(surveyQueryResult.length > 0){
+              setSurveyOptions(surveyQueryResult);
+              setOverallScore(surveyQueryResult[0].OverallScore);
+              setFunctionalScore(surveyQueryResult[0].FunctionalScore);
+              setPhysicalScore(surveyQueryResult[0].PhysicalScore);
+              setEmotionalScore(surveyQueryResult[0].EmotionalScore)
+              navigation.navigate('SurveyHistory');
+            }
+            
+          }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+  }
 
   async function handleResultHistoryButton(){
     var query = "SELECT * FROM TESTRESULT WHERE PatientID = '"+ getPatientID() +"'";
@@ -94,7 +122,7 @@ export default function TestChoiceScreen({navigation,route}) {
        
         <TestSelectButton title="Result History"  style={styles.redirect} onPress={() => handleResultHistoryButton()}  />
 
-        <TestSelectButton title="Potential Test"  style={styles.redirect} onPress={() => navigation.navigate('TestChoiceScreen')}  />
+        <TestSelectButton title="Survey History"  style={styles.redirect} onPress={() => handleSurveyHistoryButton()}  />
 
         </ScrollView>
      

@@ -9,18 +9,28 @@ import { useEffect } from 'react/cjs/react.production.min';
 import axios from 'axios';
 import {setDbLink, getDbLink} from '../config/dblink'
 import {getPatientID} from '../config/user'
+import {ProgressChart} from "react-native-chart-kit";
 export default function SurveyResultScreen({navigation, route}) {
-    const overallScore = (100 - route.params.result.toString()) * 0.01;
+    const overallScore = 1 - (route.params.result.toString()/100) ;
     const emotionalScore = 1 - (route.params.emotion.toString()/36);
     const functionalScore = 1 - (route.params.func.toString()/ 36);
     const physicalScore = 1 - (route.params.phys.toString() / 28);
+    const data = {
+      labels: ["Overall:", "Emotional:", "Functional:", "Physical:"], // optional
+      data: [overallScore, emotionalScore, functionalScore, physicalScore],
+      colors: [
+        "rgba(255, 0, 0,0.5)",
+        "rgba(238, 130, 238,0.6)",
+        "rgba(106, 90, 205,0.5)",
+        "rgba(60, 179, 113,0.2)",]
+    };
 
     const {width, height} = Dimensions.get('window');
     const CIRCLE_LENGTH = 1000;
     const RADIUS = CIRCLE_LENGTH / (2*Math.PI);
     const resultS = overallScore + "%";
     async function handleDatabasePress() {
-      const query = "INSERT into SurveyResult (FunctionalScore, PhysicalScore, EmotionalScore, OverallScore, PatientID) VALUES ('"+functionalScore+"', '"+physicalScore+"', '"+emotionalScore+"', '"+overallScore+"', '"+getPatientID()+"');"
+      const query = "INSERT into SurveyResult (FunctionalScore, PhysicalScore, EmotionalScore, OverallScore, PatientID) VALUES ('"+functionalScore+"', '"+physicalScore+"', '"+emotionalScore+"', '"+overallScore+"', '"+ge+"');"
       
       axios.defaults.headers.post['Content-Type'] ='application/x-www-form-urlencoded';
         axios
@@ -40,8 +50,31 @@ export default function SurveyResultScreen({navigation, route}) {
     
     <Screen>
    
-     
- 
+   <View>
+      <ProgressChart
+        data={data}
+        width={Dimensions.get("window").width - 10}
+        height={220}
+        strokeWidth={16}
+        hasLegend={true}
+        withCustomBarColorFromData={true}
+        radius={35}
+        chartConfig={{
+          backgroundGradientFromOpacity: 0.5,
+          backgroundGradientToOpacity: 1,
+          backgroundColor: colors.white,
+          backgroundGradientFrom: colors.white,
+          backgroundGradientTo: colors.white,
+          propsForLabels: { fill: colors.black, fontSize: 9},
+          decimalPlaces: 2,
+          color: (opacity = 1, _index) => `rgba(128,128,128,${opacity})`,
+        }}
+        style={{ marginVertical: 8, borderRadius: 10 }}
+      />
+    </View>
+
+    
+
   <View style={{height: 90, flexDirection: 'row', paddingLeft: 15, paddingRight: 15, marginBottom: 15}}>
           <TouchableOpacity style={styles.buttonStyle} onPress={handleDatabasePress}> 
               <Text style={styles.buttonTextStyle}>Save Results</Text>
@@ -59,10 +92,10 @@ export default function SurveyResultScreen({navigation, route}) {
 const styles = StyleSheet.create({
 container: {
         
-       //verticalAlign: 'middle',
+        marginTop: Dimensions.get('window').height/5,
         alignItems: 'center',
         justifyContent:'center',
-        marginTop: 350,
+        
        
   
        

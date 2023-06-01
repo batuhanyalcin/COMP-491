@@ -7,6 +7,59 @@ let accX = [];
 let accZ = [];
 let listArr = [];
 let options = [];
+let surveyQueryResult = [];
+let overallScore = 0;
+let functionalScore = 0;
+let physicalScore = 0;
+let emotionalScore = 0;
+let surveyOptions = [];
+
+export function setSurveyOptions(newSurveyOptions){
+    surveyOptions = newSurveyOptions;
+}
+
+export function getSurveyOptions(){
+    return surveyOptions;
+}
+
+export function setOverallScore(newOverallScore){
+    overallScore = newOverallScore;
+}
+
+export function getOverallScore(){
+    return overallScore;
+}
+
+export function setFunctionalScore(newFunctionalScore){
+    functionalScore = newFunctionalScore;
+}
+
+export function getFunctionalScore(){
+    return functionalScore;
+}
+
+export function setEmotionalScore(newEmotionalScore){
+    emotionalScore = newEmotionalScore;
+}
+
+export function getEmotionalScore(){
+    return emotionalScore;
+}
+
+export function setPhysicalScore(newPhysicalScore){
+    physicalScore = newPhysicalScore;
+}
+
+export function getPhysicalScore(){
+    return physicalScore;
+}
+
+export function setSurveyQueryResult(newSurveyQuery){
+    surveyQueryResult = newSurveyQuery;
+}
+export function getSurveyQueryResult(){
+    return surveyQueryResult;
+}
 
 export function setPatientID(newID) {
     patientID = newID;

@@ -93,6 +93,30 @@ app.post('/', (req,res)=>{
             }
           });
 
+          
+
+         }
+
+         if (req.body.action == "survey_result_retrieval") {
+          var query = req.body.query;
+          con.query(query, function (error, results, fields) {
+            if (error) {
+              console.log(error);
+              res.status(500).json({result:"error", error: 'An error occurred while executing the query.' });
+            }
+            else {
+              if (results.length > 0) {
+                //console.log(results);
+                res.json({ result: true, queryResult: results });
+              } else {
+                console.log('Patient not found');
+                res.json({ result: false });
+              }
+            }
+          });
+
+          
+
          }
 });
 

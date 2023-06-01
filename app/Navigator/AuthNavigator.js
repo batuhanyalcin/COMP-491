@@ -17,6 +17,7 @@ import SurveyScreen from '../Screens/SurveyScreen';
 import SurveyInfoScreen from '../Screens/SurveyInfoScreen';
 import SurveyResultScreen from '../Screens/SurveyResultScreen'
 import ResultHistory from '../Screens/ResultHistory';
+import SurveyHistory from '../Screens/SurveyHistory';
 
 
 
@@ -43,6 +44,7 @@ export default function AuthNavigator() {
         <Stack.Screen name="SurveyScreen" component={SurveyScreen} />
         <Stack.Screen name="SurveyInfoScreen" component={SurveyInfoScreen} />
         <Stack.Screen name="SurveyResultScreen" component={SurveyResultScreen} />
+        <Stack.Screen name="SurveyHistory" component={SurveyHistory} />
    </Stack.Navigator>
   )
 }
