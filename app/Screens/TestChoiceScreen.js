@@ -9,7 +9,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import axios from 'axios';
 import {setDbLink, getDbLink} from '../config/dblink'
-import {getPatientID, getQueryResult, setQueryResult, setAccX, getAccX, setAccZ, getAccZ, setListArr, getListArr, setOptions, getOptions, getPatientName, setSurveyQueryResult, getSurveyQueryResult, setEmotionalScore, setFunctionalScore, setOverallScore, setPhysicalScore, setSurveyOptions} from '../config/user'
+import {getPatientID, getQueryResult, setQueryResult, setAccX, getAccX, setAccZ, getAccZ, setListArr, getListArr, setOptions, getOptions, getPatientName, setSurveyQueryResult, getSurveyQueryResult, setEmotionalScore, setFunctionalScore, setOverallScore, setPhysicalScore, setSurveyOptions, getSurveyOptions} from '../config/user'
 
 function HomeScreen() {
   return (
@@ -44,7 +44,12 @@ export default function TestChoiceScreen({navigation,route}) {
             setSurveyQueryResult(response.data.queryResult)
         
             if(surveyQueryResult.length > 0){
-              setSurveyOptions(surveyQueryResult);
+              var allSurveyDates = []
+              for(i = 0; i < surveyQueryResult.length; i++){
+                allSurveyDates.push(surveyQueryResult[i].SurveyDate)
+              }
+              setSurveyOptions(allSurveyDates);
+              console.log(getSurveyOptions());
               setOverallScore(surveyQueryResult[0].OverallScore);
               setFunctionalScore(surveyQueryResult[0].FunctionalScore);
               setPhysicalScore(surveyQueryResult[0].PhysicalScore);
