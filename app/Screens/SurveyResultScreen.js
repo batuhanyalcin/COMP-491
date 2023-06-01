@@ -7,22 +7,28 @@ import {Circle, Svg} from 'react-native-svg'
 import Animated, {useAnimatedProps, useSharedValue, withTiming} from 'react-native-reanimated'
 import { useEffect } from 'react/cjs/react.production.min';
 export default function SurveyResultScreen({navigation, route}) {
-    const result = route.params.result.toString();
+    const overallScore = (100 - route.params.result.toString()) * 0.01;
+    const emotionalScore = 1 - (route.params.emotion.toString()/36);
+    const functionalScore = 1 - (route.params.func.toString()/ 36);
+    const physicalScore = 1 - (route.params.phys.toString() / 28);
+
     const {width, height} = Dimensions.get('window');
     const CIRCLE_LENGTH = 1000;
     const RADIUS = CIRCLE_LENGTH / (2*Math.PI);
-    const resultS = result + "%";
-    //const answers = this.props.navigation.getParam('surveyAnswers', defaultAnswers);
-    //console.log(result);
-  /*
-    const AnimatedCircle = Animated.createAnimatedComponent(Circle);
-  const circleProgress = useSharedValue(1);
-React.useEffect(()=>{
-    circleProgress.value = withTiming(0, {duration:2000});
-}, []);
-const animatedProps = useAnimatedProps(()=> ({
-    strokeDashoffset: CIRCLE_LENGTH * circleProgress.value
-}))*/
+    const resultS = overallScore + "%";
+    async function handleDatabasePress() {
+      const query = "INSERT into SurveyResult (FunctionalScore, PhysicalScore, EmotionalScore, OverallScore, PatientID) VALUES ('10', '10', '10', '10', '1');"
+        
+      axios.defaults.headers.post['Content-Type'] ='application/x-www-form-urlencoded';
+        axios
+          .post(getDbLink(), {query: query, action:"survey_result_entry"})
+          .then((response) => {
+            console.log(response);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
   return (
     
     <Screen>
@@ -45,7 +51,7 @@ const animatedProps = useAnimatedProps(()=> ({
       stroke="rgb(145, 154, 255)"
       strokeWidth={15}
       strokeDasharray={CIRCLE_LENGTH}
-      strokeDashoffset={CIRCLE_LENGTH * (100 - result) * 0.01}
+      strokeDashoffset={CIRCLE_LENGTH * overallScore}
     />
     
   </Svg>

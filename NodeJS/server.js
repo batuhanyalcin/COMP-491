@@ -35,7 +35,7 @@ app.post('/', (req,res)=>{
     //var records = [[req.body.name, req.body.rollno]];
     //if(records[0][0]!=null)
     //{
-        if(req.body.action == "register" || req.body.action == "test_result_entry"){
+        if(req.body.action == "register" || req.body.action == "test_result_entry" || req.body.action == 'survey_result_entry'){
         var query = req.body.query;
         console.log(query);
         con.query(query);
