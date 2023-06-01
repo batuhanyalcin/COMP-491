@@ -49,8 +49,8 @@ export default function SurveyResultScreen({navigation, route}) {
   return (
     
     <Screen>
-   
-   <View>
+   <View ><Text style = {styles.text}>Survey Results</Text></View>
+   <View style = {styles.container}>
       <ProgressChart
         data={data}
         width={Dimensions.get("window").width - 10}
@@ -65,7 +65,7 @@ export default function SurveyResultScreen({navigation, route}) {
           backgroundColor: colors.white,
           backgroundGradientFrom: colors.white,
           backgroundGradientTo: colors.white,
-          propsForLabels: { fill: colors.black, fontSize: 9},
+          propsForLabels: { fill: colors.black, fontSize: 9, fontWeight: 500},
           decimalPlaces: 2,
           color: (opacity = 1, _index) => `rgba(128,128,128,${opacity})`,
         }}
@@ -73,7 +73,7 @@ export default function SurveyResultScreen({navigation, route}) {
       />
     </View>
 
-    
+
 
   <View style={{height: 90, flexDirection: 'row', paddingLeft: 15, paddingRight: 15, marginBottom: 15}}>
           <TouchableOpacity style={styles.buttonStyle} onPress={handleDatabasePress}> 
@@ -104,7 +104,8 @@ text:{
    
     alignSelf: 'center',
     textAlignVertical: 'center',
-    fontSize: 100,
+    fontSize: 20,
+    fontWeight: 800
     //marginTop: 350,
     //marginLeft: 100
     
