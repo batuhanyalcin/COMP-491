@@ -1,4 +1,4 @@
-import { Dimensions, SafeAreaView, StyleSheet, Text, View, ScrollView, Button, FlatList } from 'react-native'
+import { Dimensions, SafeAreaView, StyleSheet, Text, Image, View, ScrollView, Button, FlatList, TouchableOpacity } from 'react-native'
 import React from 'react'
 import colors from '../config/colors';
 import Screen from '../components/Screen';
@@ -29,6 +29,8 @@ export default function SurveyResultScreen({navigation, route}) {
             console.log(error);
           });
       }
+
+      const [fileUri, setFileUri] = React.useState(null);
   return (
     
     <Screen>
@@ -53,8 +55,13 @@ export default function SurveyResultScreen({navigation, route}) {
       strokeDasharray={CIRCLE_LENGTH}
       strokeDashoffset={CIRCLE_LENGTH * overallScore}
     />
+
     
   </Svg>
+  <TouchableOpacity style={styles.buttonStyle} onPress={handleDatabasePress} disabled={!fileUri}> 
+              <Text style={styles.buttonTextStyle}>Save Results</Text>
+              <Image source={require('../assets/diskette.png')} style={{width: 30, height: 30, marginLeft: 'auto', marginRight: 'auto', marginBottom: 'auto'}}/>
+  </TouchableOpacity>
   
 
 
@@ -84,6 +91,28 @@ text:{
     //marginTop: 350,
     //marginLeft: 100
     
+},
+
+buttonStyle: {
+  flex: 1,
+  marginLeft: 10,
+  marginRight: 10,
+  borderRadius: 13,
+  shadowColor: '#171717',
+  shadowOffset: {width: 0, height: 4},
+  shadowOpacity: 0.2,
+  shadowRadius: 5,
+  elevation: 8,
+  backgroundColor: '#0e3363'
+},
+buttonTextStyle: {
+  fontSize: 18,
+  color: 'white',
+  fontWeight: "bold",
+  alignSelf: "center",
+  marginTop: 'auto',
+  marginBottom: 10,
+
 }
   });
 
