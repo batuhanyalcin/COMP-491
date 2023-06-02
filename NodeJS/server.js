@@ -46,7 +46,7 @@ app.post('/', (req,res)=>{
             var email = req.body.email;
             var password = req.body.password;
             
-            var query = "SELECT * FROM PATIENT WHERE Email = '" + email + "'";
+            var query = "SELECT * FROM hospital_patient WHERE Email = '" + email + "'";
             console.log(query);
           
             con.query(query, function (error, results, fields) {
