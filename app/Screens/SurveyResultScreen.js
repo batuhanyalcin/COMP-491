@@ -30,7 +30,7 @@ export default function SurveyResultScreen({navigation, route}) {
     const RADIUS = CIRCLE_LENGTH / (2*Math.PI);
     const resultS = overallScore + "%";
     async function handleDatabasePress() {
-      const query = "INSERT into SurveyResult (FunctionalScore, PhysicalScore, EmotionalScore, OverallScore, PatientID) VALUES ('"+functionalScore+"', '"+physicalScore+"', '"+emotionalScore+"', '"+overallScore+"', '"+ge+"');"
+      const query = "INSERT into SurveyResult (FunctionalScore, PhysicalScore, EmotionalScore, OverallScore, PatientID) VALUES ('"+functionalScore+"', '"+physicalScore+"', '"+emotionalScore+"', '"+overallScore+"', '"+getPatientID()+"');"
       
       axios.defaults.headers.post['Content-Type'] ='application/x-www-form-urlencoded';
         axios

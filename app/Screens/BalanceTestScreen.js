@@ -25,7 +25,7 @@ export default function BalanceTestScreen({navigation,route}) {
  
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const dt = 0.01 // seconds
-  const totalTime = 30 // seconds
+  const totalTime = 20 // seconds
   const numOfIterations = Math.floor(totalTime / dt)
   var i = 0
   const [isRemainingTimeSpeaking, setIsRemainingTimeSpeaking] = useState(false)
